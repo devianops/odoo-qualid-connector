@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
+import logging
 
 from odoo import _, api, fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class QualidWhatsappTemplate(models.Model):
@@ -63,6 +66,22 @@ class QualidWhatsappTemplate(models.Model):
                 'next': {'type': 'ir.actions.client', 'tag': 'reload'},
             },
         }
+
+    @api.model
+    def _qualid_sync_safe(self):
+        """Sync without raising — for automatic syncs (cron, token save). Returns count or None."""
+        try:
+            with self.env.cr.savepoint():
+                return self._qualid_sync()
+        except Exception as e:  # noqa: BLE001 — automatic sync must never break the caller
+            _logger.warning('Quali-D automatic template sync failed: %s', e)
+            return None
+
+    @api.model
+    def _cron_sync_templates(self):
+        _url, token = self.env['qualid.api']._qualid_get_config()
+        if token:
+            self._qualid_sync_safe()
 
     @api.model
     def _qualid_sync(self):

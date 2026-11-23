@@ -15,6 +15,15 @@ class ResConfigSettings(models.TransientModel):
         for rec in self:
             rec.qualid_template_count = count
 
+    def set_values(self):
+        icp = self.env['ir.config_parameter'].sudo()
+        old_token = (icp.get_param(PARAM_TOKEN) or '').strip()
+        super().set_values()
+        new_token = (icp.get_param(PARAM_TOKEN) or '').strip()
+        # New or changed token → pull templates right away (never blocks saving on failure)
+        if new_token and new_token != old_token:
+            self.env['qualid.whatsapp.template']._qualid_sync_safe()
+
     def _qualid_notify(self, message, ntype='success', reload=False):
         params = {'title': _('Quali-D'), 'message': message, 'type': ntype, 'sticky': ntype != 'success'}
         if reload:
