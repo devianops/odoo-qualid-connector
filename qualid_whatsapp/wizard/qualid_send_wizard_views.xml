@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="qualid_send_wizard_view_form" model="ir.ui.view">
+        <field name="name">qualid.send.wizard.form</field>
+        <field name="model">qualid.send.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send WhatsApp Template">
+                <field name="res_model" invisible="1"/>
+                <field name="res_ids" invisible="1"/>
+                <field name="needs_media" invisible="1"/>
+                <div class="alert alert-info" role="alert" invisible="record_count &lt;= 1">
+                    <field name="record_count" class="oe_inline" readonly="1"/> records selected — messages will be queued and sent in the background.
+                </div>
+                <group>
+                    <group>
+                        <field name="template_id" options="{'no_create': True}"/>
+                        <field name="phone_path" placeholder="auto (mobile, phone, partner_id.mobile…)"
+                               invisible="phone_override"/>
+                        <field name="phone_override" invisible="record_count &gt; 1" placeholder="+20…"/>
+                        <field name="media_url" invisible="not needs_media" required="needs_media"
+                               placeholder="https://…"/>
+                    </group>
+                    <group invisible="record_count &gt; 1">
+                        <field name="preview_phone"/>
+                    </group>
+                </group>
+                <field name="line_ids" nolabel="1" invisible="not template_id">
+                    <tree editable="bottom" create="false" delete="false">
+                        <field name="sequence" column_invisible="True"/>
+                        <field name="component" readonly="1"/>
+                        <field name="placeholder" readonly="1" string="Variable"/>
+                        <field name="source"/>
+                        <field name="field_path" invisible="source != 'field'" placeholder="e.g. name"/>
+                        <field name="text" invisible="source != 'text'"/>
+                    </tree>
+                </field>
+                <group invisible="not template_id or record_count &gt; 1">
+                    <field name="preview_text" nolabel="1" colspan="2" readonly="1"/>
+                </group>
+                <footer>
+                    <button name="action_send" type="object" string="Send" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_qualid_send_wizard_partner" model="ir.actions.act_window">
+        <field name="name">Send WhatsApp Template</field>
+        <field name="res_model">qualid.send.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">list,form</field>
+    </record>
+</odoo>

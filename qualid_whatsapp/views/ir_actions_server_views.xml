@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Extends the base server action form. base_automation's popup form
+        (ir_actions_server_view_form_automation) inherits this view, so the
+        fields also appear inside Automation Rules.
+    -->
+    <record id="qualid_view_server_action_form" model="ir.ui.view">
+        <field name="name">ir.actions.server.form.qualid</field>
+        <field name="model">ir.actions.server</field>
+        <field name="inherit_id" ref="base.view_server_action_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='action_content']" position="after">
+                <div invisible="state != 'qualid_template'" class="mt-2">
+                    <field name="qualid_template_needs_media" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="qualid_template_id"
+                                   required="state == 'qualid_template'"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="qualid_phone_path" placeholder="auto (mobile, phone, partner_id.mobile…)"/>
+                            <field name="qualid_media_url" invisible="not qualid_template_needs_media"
+                                   required="state == 'qualid_template' and qualid_template_needs_media"
+                                   placeholder="https://…"/>
+                        </group>
+                        <group>
+                            <field name="qualid_send_mode" widget="radio"/>
+                            <field name="qualid_once_per_record"/>
+                        </group>
+                    </group>
+                    <field name="qualid_param_ids" nolabel="1" invisible="not qualid_template_id">
+                        <tree editable="bottom" create="false" delete="false">
+                            <field name="sequence" column_invisible="True"/>
+                            <field name="component" readonly="1"/>
+                            <field name="placeholder" readonly="1" string="Variable"/>
+                            <field name="source"/>
+                            <field name="field_path" invisible="source != 'field'"
+                                   required="source == 'field'" placeholder="e.g. partner_id.name"/>
+                            <field name="text" invisible="source != 'text'"
+                                   required="source == 'text'" placeholder="Fixed text"/>
+                        </tree>
+                    </field>
+                    <div class="text-muted small" invisible="not qualid_template_id">
+                        Use technical field names; follow relations with dots (partner_id.name, user_id.name, amount_total).
+                        Manage templates under <b>Quali-D WhatsApp → Templates</b>.
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

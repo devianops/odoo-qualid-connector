@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_qualid_root" name="Quali-D WhatsApp"
+              web_icon="qualid_whatsapp,static/description/icon.png"
+              groups="base.group_user" sequence="85"/>
+
+    <menuitem id="menu_qualid_messages" name="Messages" parent="menu_qualid_root"
+              action="action_qualid_message" sequence="10"/>
+
+    <menuitem id="menu_qualid_templates" name="Templates" parent="menu_qualid_root"
+              action="action_qualid_template" sequence="20"/>
+
+    <menuitem id="menu_qualid_config" name="Configuration" parent="menu_qualid_root"
+              groups="base.group_system" sequence="90"/>
+
+    <menuitem id="menu_qualid_settings" name="Settings" parent="menu_qualid_config"
+              action="action_qualid_settings" sequence="10"/>
+
+    <menuitem id="menu_qualid_automations" name="Automation Rules" parent="menu_qualid_config"
+              action="base_automation.base_automation_act" sequence="20"/>
+</odoo>

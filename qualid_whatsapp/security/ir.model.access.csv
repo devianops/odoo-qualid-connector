@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_qualid_template_user,qualid.whatsapp.template user,model_qualid_whatsapp_template,base.group_user,1,0,0,0
+access_qualid_template_system,qualid.whatsapp.template system,model_qualid_whatsapp_template,base.group_system,1,1,1,1
+access_qualid_action_param_user,qualid.action.param user,model_qualid_action_param,base.group_user,1,0,0,0
+access_qualid_action_param_system,qualid.action.param system,model_qualid_action_param,base.group_system,1,1,1,1
+access_qualid_message_user,qualid.whatsapp.message user,model_qualid_whatsapp_message,base.group_user,1,0,0,0
+access_qualid_message_system,qualid.whatsapp.message system,model_qualid_whatsapp_message,base.group_system,1,1,1,1
+access_qualid_send_wizard_user,qualid.send.wizard user,model_qualid_send_wizard,base.group_user,1,1,1,1
+access_qualid_send_wizard_line_user,qualid.send.wizard.line user,model_qualid_send_wizard_line,base.group_user,1,1,1,1

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="qualid_template_view_tree" model="ir.ui.view">
+        <field name="name">qualid.whatsapp.template.tree</field>
+        <field name="model">qualid.whatsapp.template</field>
+        <field name="arch" type="xml">
+            <tree string="WhatsApp Templates" create="false" edit="false">
+                <header>
+                    <button name="action_sync_templates" type="object" string="Sync Templates"
+                            class="btn-primary" display="always" groups="base.group_system"/>
+                </header>
+                <field name="name"/>
+                <field name="language"/>
+                <field name="category"/>
+                <field name="header_format" optional="show"/>
+                <field name="body_variable_count"/>
+                <field name="status" optional="hide"/>
+                <field name="last_sync" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="qualid_template_view_form" model="ir.ui.view">
+        <field name="name">qualid.whatsapp.template.form</field>
+        <field name="model">qualid.whatsapp.template</field>
+        <field name="arch" type="xml">
+            <form string="WhatsApp Template" create="false">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="language"/>
+                            <field name="category"/>
+                            <field name="status"/>
+                        </group>
+                        <group>
+                            <field name="header_format"/>
+                            <field name="header_has_variable"/>
+                            <field name="body_variable_count"/>
+                            <field name="parameter_format"/>
+                            <field name="last_sync"/>
+                        </group>
+                    </group>
+                    <separator string="Body"/>
+                    <field name="body_text" nolabel="1"/>
+                    <group>
+                        <field name="footer_text"/>
+                        <field name="body_variables"/>
+                        <field name="buttons_json"/>
+                        <field name="meta_template_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="qualid_template_view_search" model="ir.ui.view">
+        <field name="name">qualid.whatsapp.template.search</field>
+        <field name="model">qualid.whatsapp.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="language"/>
+                <filter name="marketing" string="Marketing" domain="[('category', '=', 'MARKETING')]"/>
+                <filter name="utility" string="Utility" domain="[('category', '=', 'UTILITY')]"/>
+                <separator/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
+                    <filter name="group_language" string="Language" context="{'group_by': 'language'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_qualid_template" model="ir.actions.act_window">
+        <field name="name">WhatsApp Templates</field>
+        <field name="res_model">qualid.whatsapp.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No templates yet</p>
+            <p>Set your Quali-D token in Settings, then click <b>Sync Templates</b>.</p>
+        </field>
+    </record>
+</odoo>
