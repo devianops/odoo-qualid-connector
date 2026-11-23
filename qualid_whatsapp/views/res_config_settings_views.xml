@@ -17,9 +17,6 @@
                                         string="Test Connection" icon="fa-plug" class="btn-link"/>
                             </div>
                         </setting>
-                        <setting string="API URL" help="Leave the default unless Quali-D support tells you otherwise.">
-                            <field name="qualid_api_url"/>
-                        </setting>
                     </block>
                     <block title="Templates" name="qualid_templates">
                         <setting string="WhatsApp Templates"

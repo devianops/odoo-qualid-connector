@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from odoo import _, fields, models
 
-from .qualid_api import DEFAULT_API_URL, PARAM_TOKEN, PARAM_URL
+from .qualid_api import PARAM_TOKEN
 
 
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    qualid_api_url = fields.Char('Quali-D API URL', config_parameter=PARAM_URL, default=DEFAULT_API_URL)
     qualid_api_token = fields.Char('Quali-D Token', config_parameter=PARAM_TOKEN)
     qualid_template_count = fields.Integer(compute='_compute_qualid_template_count')
 
