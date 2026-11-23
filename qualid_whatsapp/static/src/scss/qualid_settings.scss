@@ -1,0 +1,153 @@
+// Quali-D brand styles for the settings page
+$qualid-blue: #2b78f6;
+$qualid-blue-dark: #1a5fd1;
+$qualid-wa: #25d366;
+
+.o_qualid_hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin: 16px 16px 8px;
+    padding: 24px 28px;
+    border-radius: 14px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba($qualid-wa, 0.10), transparent 45%),
+        linear-gradient(135deg, rgba($qualid-blue, 0.10), rgba($qualid-blue, 0.02));
+    border: 1px solid rgba($qualid-blue, 0.22);
+
+    .o_qualid_hero_main {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-width: 0;
+    }
+
+    .o_qualid_logo {
+        height: 34px;
+        width: auto;
+        max-width: 100%;
+    }
+
+    .o_qualid_tagline {
+        font-size: 14px;
+        color: var(--o-color-gray-700, #495057);
+        max-width: 520px;
+    }
+
+    .o_qualid_status {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+    }
+
+    .o_qualid_account {
+        font-size: 12px;
+        color: var(--o-color-gray-600, #6c757d);
+    }
+}
+
+.o_qualid_pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &.o_qualid_pill_ok {
+        background: rgba($qualid-wa, 0.15);
+        color: #128c48;
+    }
+
+    &.o_qualid_pill_off {
+        background: rgba(#f59e0b, 0.15);
+        color: #b45309;
+    }
+}
+
+.o_qualid_steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 8px 16px 4px;
+
+    .o_qualid_step {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px dashed rgba($qualid-blue, 0.35);
+        font-size: 13px;
+    }
+
+    .o_qualid_step_num {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: $qualid-blue;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.o_qualid_actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.o_qualid_btn.btn-primary {
+    background-color: $qualid-blue;
+    border-color: $qualid-blue;
+
+    &:hover,
+    &:focus {
+        background-color: $qualid-blue-dark;
+        border-color: $qualid-blue-dark;
+    }
+}
+
+.o_qualid_stat {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 4px;
+
+    .o_qualid_stat_num {
+        font-size: 26px;
+        font-weight: 700;
+        color: $qualid-blue;
+        line-height: 1;
+    }
+
+    .o_qualid_stat_label {
+        color: var(--o-color-gray-600, #6c757d);
+    }
+}
+
+.o_qualid_inline {
+    display: inline-block;
+    width: auto !important;
+}
+
+.o_qualid_footer {
+    margin: 4px 16px 24px;
+    font-size: 12px;
+    color: var(--o-color-gray-600, #6c757d);
+
+    a {
+        color: $qualid-blue;
+    }
+}

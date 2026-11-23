@@ -7,31 +7,100 @@
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
                 <app data-string="Quali-D WhatsApp" string="Quali-D WhatsApp" name="qualid_whatsapp"
-                     groups="base.group_system">
+                     logo="/qualid_whatsapp/static/description/icon.png" groups="base.group_system">
+
+                    <field name="qualid_connected" invisible="1"/>
+
+                    <!-- ── Brand header ── -->
+                    <div class="o_qualid_hero">
+                        <div class="o_qualid_hero_main">
+                            <img src="/qualid_whatsapp/static/src/img/qualid_logo.png" alt="Quali-D" class="o_qualid_logo"/>
+                            <div class="o_qualid_tagline">
+                                Send approved WhatsApp templates from any Odoo record or automation rule.
+                            </div>
+                        </div>
+                        <div class="o_qualid_status">
+                            <span class="o_qualid_pill o_qualid_pill_ok" invisible="not qualid_connected">
+                                <i class="fa fa-check-circle me-1"/>Connected
+                            </span>
+                            <span class="o_qualid_pill o_qualid_pill_off" invisible="qualid_connected">
+                                <i class="fa fa-plug me-1"/>Not connected
+                            </span>
+                            <div class="o_qualid_account" invisible="not qualid_connected">
+                                <field name="qualid_account_email" readonly="1" class="o_qualid_inline"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Getting started (shown until connected) ── -->
+                    <div class="o_qualid_steps" invisible="qualid_connected">
+                        <div class="o_qualid_step">
+                            <span class="o_qualid_step_num">1</span>
+                            <div>
+                                <b>Create a token in Quali-D</b>
+                                <div class="text-muted">Settings → Odoo Connector → New Token</div>
+                            </div>
+                        </div>
+                        <div class="o_qualid_step">
+                            <span class="o_qualid_step_num">2</span>
+                            <div>
+                                <b>Paste it below and save</b>
+                                <div class="text-muted">Your templates are imported automatically</div>
+                            </div>
+                        </div>
+                        <div class="o_qualid_step">
+                            <span class="o_qualid_step_num">3</span>
+                            <div>
+                                <b>Send from Odoo</b>
+                                <div class="text-muted">Automation rules, or ⚙ Actions on any contact</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <block title="Connection" name="qualid_connection">
                         <setting string="Quali-D Token"
-                                 help="Generate a token in Quali-D under Settings → Odoo Connector, then paste it here.">
+                                 help="Paste the token you created in your Quali-D dashboard. Keep it private — you can rotate or revoke it at any time.">
                             <field name="qualid_api_token" password="True" placeholder="odoo_qd_…"/>
-                            <div class="mt8">
+                            <div class="o_qualid_actions">
                                 <button name="action_qualid_test_connection" type="object"
-                                        string="Test Connection" icon="fa-plug" class="btn-link"/>
+                                        string="Test Connection" icon="fa-plug" class="btn btn-primary btn-sm o_qualid_btn"/>
+                                <a href="https://dashboard.quali-d.com/settings/odoo-connector" target="_blank"
+                                   role="button" class="btn btn-link btn-sm">
+                                    <i class="fa fa-external-link me-1"/>Get a token
+                                </a>
                             </div>
                         </setting>
                     </block>
-                    <block title="Templates" name="qualid_templates">
-                        <setting string="WhatsApp Templates"
-                                 help="Approved templates are copied from Quali-D so you can pick them in actions.">
-                            <div class="mt8">
-                                <field name="qualid_template_count" class="oe_inline" readonly="1"/> templates synchronized
+
+                    <block title="WhatsApp Templates" name="qualid_templates">
+                        <setting string="Approved Templates"
+                                 help="Synced from Quali-D automatically when you save your token and every hour.">
+                            <div class="o_qualid_stat">
+                                <span class="o_qualid_stat_num"><field name="qualid_template_count" readonly="1"/></span>
+                                <span class="o_qualid_stat_label">templates ready to use</span>
                             </div>
-                            <div class="mt8">
+                            <div class="text-muted small" invisible="not qualid_last_sync">
+                                Last synced <field name="qualid_last_sync" readonly="1" class="o_qualid_inline"/>
+                            </div>
+                            <div class="o_qualid_actions">
                                 <button name="action_qualid_sync_templates" type="object"
-                                        string="Sync Templates" icon="fa-refresh" class="btn-link"/>
+                                        string="Sync Now" icon="fa-refresh" class="btn btn-secondary btn-sm"/>
                                 <button name="%(qualid_whatsapp.action_qualid_template)d" type="action"
-                                        string="View Templates" icon="fa-arrow-right" class="btn-link"/>
+                                        string="View Templates" icon="fa-list" class="btn btn-link btn-sm"/>
+                            </div>
+                        </setting>
+                        <setting string="Sent Messages"
+                                 help="Every message sent from Odoo, with its delivery status and any error.">
+                            <div class="o_qualid_actions">
+                                <button name="%(qualid_whatsapp.action_qualid_message)d" type="action"
+                                        string="Open Message Log" icon="fa-whatsapp" class="btn btn-link btn-sm"/>
                             </div>
                         </setting>
                     </block>
+
+                    <div class="o_qualid_footer">
+                        Need help? <a href="https://quali-d.com" target="_blank">quali-d.com</a>
+                    </div>
                 </app>
             </xpath>
         </field>

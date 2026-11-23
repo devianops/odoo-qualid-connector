@@ -20,6 +20,11 @@
         'wizard/qualid_send_wizard_views.xml',
         'views/menus.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'qualid_whatsapp/static/src/scss/qualid_settings.scss',
+        ],
+    },
     'images': ['static/description/banner.png'],
     'installable': True,
     'application': True,
