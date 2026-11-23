@@ -33,7 +33,7 @@ class QualidWhatsappMessage(models.Model):
     record_name = fields.Char('Document', readonly=True)
 
     phone = fields.Char(readonly=True)
-    template_id = fields.Many2one('qualid.whatsapp.template', readonly=True, ondelete='set null')
+    template_id = fields.Many2one('qualid.whatsapp.template', 'Template Record', readonly=True, ondelete='set null')
     template_name = fields.Char('Template', readonly=True, required=True)
     template_language = fields.Char('Language', readonly=True, required=True)
     body_params = fields.Text('Body Variables', readonly=True, help='JSON list')

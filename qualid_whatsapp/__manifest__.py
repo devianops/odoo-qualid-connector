@@ -3,20 +3,6 @@
     'name': 'Quali-D WhatsApp',
     'version': '17.0.1.0.0',
     'summary': 'Send approved WhatsApp templates from Odoo automation rules, server actions and records via Quali-D',
-    'description': """
-Quali-D WhatsApp Connector
-==========================
-Send approved WhatsApp Business templates through Quali-D (https://quali-d.com)
-directly from Odoo:
-
-* New server action type "Send Quali-D WhatsApp Template" — usable in
-  Automation Rules (base_automation), contextual buttons and scheduled actions
-* Map template variables to any record field (dotted paths supported)
-* Background queue with automatic retries, or immediate sending
-* "Send once per record" protection against duplicate automation triggers
-* Manual "Send WhatsApp Template" wizard on contacts
-* Full send log + chatter note on the record
-""",
     'author': 'Quali-D',
     'website': 'https://quali-d.com',
     'support': 'support@quali-d.com',
