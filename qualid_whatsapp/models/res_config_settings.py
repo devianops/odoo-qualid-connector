@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 
 from .qualid_api import PARAM_TOKEN
 
@@ -10,6 +10,8 @@ class ResConfigSettings(models.TransientModel):
     qualid_api_token = fields.Char('Quali-D Token', config_parameter=PARAM_TOKEN)
     qualid_template_count = fields.Integer(compute='_compute_qualid_template_count')
 
+    # depends on company_id so the settings form computes it when it opens
+    @api.depends('company_id')
     def _compute_qualid_template_count(self):
         count = self.env['qualid.whatsapp.template'].search_count([])
         for rec in self:
