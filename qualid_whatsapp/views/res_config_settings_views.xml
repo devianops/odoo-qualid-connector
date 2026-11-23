@@ -98,6 +98,19 @@
                         </setting>
                     </block>
 
+                    <block title="Files &amp; Privacy" name="qualid_files">
+                        <setting string="Images, videos and documents"
+                                 help="PDFs, attachments and images sent from Odoo are uploaded securely to Quali-D so WhatsApp can deliver them.">
+                            <div class="o_qualid_retention">
+                                <i class="fa fa-clock-o me-1"/>Stored for <b>30 days</b>, then <b>permanently deleted</b> on day 31.
+                            </div>
+                            <div class="text-muted small mt-1">
+                                Not counted toward your Quali-D broadcast media storage.
+                                Limits: images 5 MB (converted to JPEG), videos 16 MB (MP4/3GP), documents 100 MB.
+                            </div>
+                        </setting>
+                    </block>
+
                     <div class="o_qualid_footer">
                         Need help? <a href="https://quali-d.com" target="_blank">quali-d.com</a>
                     </div>

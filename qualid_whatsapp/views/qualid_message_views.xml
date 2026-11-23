@@ -66,8 +66,13 @@
                     <group string="Variables">
                         <field name="header_text"/>
                         <field name="body_params"/>
-                        <field name="media_url"/>
                         <field name="media_type"/>
+                        <field name="media_source" invisible="not media_type"/>
+                        <field name="media_report_id" invisible="media_source != 'report'"/>
+                        <field name="media_field_name" invisible="media_source not in ('image_field', 'url_field')"/>
+                        <field name="media_attachment_filter" invisible="media_source != 'attachment'"/>
+                        <field name="media_filename" invisible="not media_filename"/>
+                        <field name="media_url" widget="url" invisible="not media_url"/>
                     </group>
                     <group string="Error" invisible="not error_code and not error_message">
                         <field name="error_code"/>

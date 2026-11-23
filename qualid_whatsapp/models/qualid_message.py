@@ -8,6 +8,8 @@ from markupsafe import Markup
 
 from odoo import _, api, fields, models
 
+from .qualid_media import MEDIA_SOURCES, QualidMediaError
+
 _logger = logging.getLogger(__name__)
 
 MAX_ATTEMPTS = 3
@@ -38,10 +40,16 @@ class QualidWhatsappMessage(models.Model):
     template_language = fields.Char('Language', readonly=True, required=True)
     body_params = fields.Text('Body Variables', readonly=True, help='JSON list')
     header_text = fields.Char(readonly=True)
-    media_url = fields.Char('Header Media URL', readonly=True)
     media_type = fields.Selection(
-        [('image', 'Image'), ('video', 'Video'), ('document', 'Document')], readonly=True,
+        [('image', 'Image'), ('video', 'Video'), ('document', 'Document')], 'Header Type', readonly=True,
     )
+    media_source = fields.Selection(MEDIA_SOURCES, 'Header File', readonly=True)
+    media_report_id = fields.Many2one('ir.actions.report', 'PDF Report', readonly=True, ondelete='set null')
+    media_field_name = fields.Char('Header Field', readonly=True)
+    media_attachment_filter = fields.Char('Attachment Filter', readonly=True)
+    media_url = fields.Char('Header File Link', readonly=True,
+                            help='Public link sent to WhatsApp. Files uploaded from Odoo are deleted by Quali-D after 30 days.')
+    media_filename = fields.Char('Header File Name', readonly=True)
 
     action_id = fields.Many2one('ir.actions.server', 'Server Action', readonly=True, ondelete='set null')
     idempotency_key = fields.Char(readonly=True, copy=False, index=True)
@@ -62,7 +70,7 @@ class QualidWhatsappMessage(models.Model):
     # Queueing
     # ------------------------------------------------------------------
     @api.model
-    def _qualid_enqueue(self, records, template, param_lines, phone_path=None, media_url=None,
+    def _qualid_enqueue(self, records, template, param_lines, phone_path=None, media_spec=None,
                         action=None, once_per_record=False, send_now=False, phone=None):
         """Create one message per record. Returns the created/requeued messages.
 
@@ -71,7 +79,7 @@ class QualidWhatsappMessage(models.Model):
         Api = self.env['qualid.api']
         Message = self.sudo()
         result = Message.browse()
-        media_type = (template.header_format or '').lower() if template._qualid_has_media_header() else False
+        media_vals = dict(media_spec or {})
 
         forced_phone = phone
         for record in records:
@@ -93,7 +101,8 @@ class QualidWhatsappMessage(models.Model):
                         existing.write({
                             'state': 'queued', 'phone': phone, 'body_params': json.dumps(body),
                             'header_text': header, 'attempts': 0, 'next_attempt': False,
-                            'error_code': False, 'error_message': False,
+                            'error_code': False, 'error_message': False, 'media_filename': False,
+                            **media_vals,
                         })
                         result |= existing
                     continue
@@ -108,8 +117,7 @@ class QualidWhatsappMessage(models.Model):
                 'template_language': template.language,
                 'body_params': json.dumps(body),
                 'header_text': header,
-                'media_url': media_url or False,
-                'media_type': media_type if media_url else False,
+                **media_vals,
                 'action_id': action.id if action else False,
                 'idempotency_key': key,
             }
@@ -153,9 +161,9 @@ class QualidWhatsappMessage(models.Model):
         }
         if self.header_text:
             payload['header_text'] = self.header_text
-        if self.media_url:
+        if self.media_type and self.media_url:
             payload['header_media_url'] = self.media_url
-            payload['header_media_type'] = self.media_type or 'image'
+            payload['header_media_type'] = self.media_type
         return payload
 
     def _qualid_send(self):
@@ -163,6 +171,15 @@ class QualidWhatsappMessage(models.Model):
         for msg in self.sudo():
             if msg.state != 'queued':
                 continue
+            if msg.media_type and not msg.media_url:
+                try:
+                    url, filename = self.env['qualid.media.resolver']._qualid_resolve(msg)
+                    msg.write({'media_url': url, 'media_filename': filename or False})
+                except QualidMediaError as e:
+                    msg.write({'state': 'failed', 'attempts': msg.attempts + 1,
+                               'error_code': e.code, 'error_message': e.message, 'next_attempt': False})
+                    msg._qualid_post_chatter()
+                    continue
             status, data = Api._qualid_request('POST', '/odoo_send_template', payload=msg._qualid_payload(),
                                                raise_on_error=False)
             attempts = msg.attempts + 1
@@ -255,6 +272,9 @@ class QualidWhatsappMessage(models.Model):
         to_retry = self.filtered(lambda m: m.state in ('failed', 'cancel') and m.phone)
         to_retry.write({'state': 'queued', 'attempts': 0, 'next_attempt': False,
                         'error_code': False, 'error_message': False})
+        # regenerate files produced from the record (fresh PDF / attachment / image)
+        to_retry.filtered(lambda m: m.media_source not in (False, 'url', 'url_field')).write(
+            {'media_url': False, 'media_filename': False})
         if to_retry:
             self._qualid_trigger_cron()
         return True

@@ -11,6 +11,7 @@ _logger = logging.getLogger(__name__)
 
 DEFAULT_API_URL = 'https://api.quali-d.com'
 REQUEST_TIMEOUT = 30
+UPLOAD_TIMEOUT = 180
 PARAM_URL = 'qualid_whatsapp.api_url'
 PARAM_TOKEN = 'qualid_whatsapp.api_token'
 
@@ -85,6 +86,35 @@ class QualidApi(models.AbstractModel):
         if raise_on_error and not data.get('success'):
             raise UserError(data.get('message') or _('Quali-D request failed (HTTP %s).', status))
         return status, data
+
+    @api.model
+    def _qualid_upload(self, filename, content, mimetype, expected_type=None, odoo_model=None, odoo_id=None):
+        """Upload a header file to Quali-D. Returns (http_status, data); never raises."""
+        url, token = self._qualid_get_config()
+        if not token:
+            return 0, {'success': False, 'message': _('Quali-D token is not configured.'), 'error_code': 'NO_TOKEN'}
+        data = {'expected_type': expected_type or '', 'odoo_model': odoo_model or '', 'odoo_id': odoo_id or ''}
+        headers = {
+            'Authorization': 'Bearer %s' % token,
+            'Accept': 'application/json',
+            'User-Agent': 'Odoo-QualiD-WhatsApp/1.0',
+        }
+        try:
+            resp = requests.post(url + '/odoo/media', data=data, headers=headers,
+                                 files={'file': (filename, content, mimetype)}, timeout=UPLOAD_TIMEOUT)
+            status = resp.status_code
+            try:
+                body = resp.json()
+                if not isinstance(body, dict):
+                    raise ValueError
+            except ValueError:
+                body = {'success': False, 'error_code': 'BAD_RESPONSE',
+                        'message': _('Unexpected response from Quali-D while uploading (HTTP %s).', status)}
+        except requests.RequestException as e:
+            _logger.warning('Quali-D upload failed: %s', e.__class__.__name__)
+            status, body = 0, {'success': False, 'error_code': 'NETWORK_ERROR',
+                               'message': _('Could not reach Quali-D to upload the file (%s).', e.__class__.__name__)}
+        return status, body
 
     # ------------------------------------------------------------------
     # Record value resolution (used by server actions and the wizard)

@@ -6,6 +6,7 @@ from odoo.fields import Command
 
 class QualidSendWizard(models.TransientModel):
     _name = 'qualid.send.wizard'
+    _inherit = ['qualid.media.mixin']
     _description = 'Send WhatsApp Template (Quali-D)'
 
     res_model = fields.Char(required=True, readonly=True)
@@ -20,8 +21,8 @@ class QualidSendWizard(models.TransientModel):
         'Phone Number',
         help='Only for a single record: send to this number instead of the record\'s.',
     )
-    media_url = fields.Char('Header Media URL')
     needs_media = fields.Boolean(compute='_compute_needs_media')
+    header_type = fields.Char(compute='_compute_needs_media')
     line_ids = fields.One2many('qualid.send.wizard.line', 'wizard_id', 'Variables')
     preview_phone = fields.Char(compute='_compute_preview', string='Recipient')
     preview_text = fields.Text(compute='_compute_preview', string='Preview')
@@ -51,6 +52,7 @@ class QualidSendWizard(models.TransientModel):
     def _compute_needs_media(self):
         for wiz in self:
             wiz.needs_media = bool(wiz.template_id) and wiz.template_id._qualid_has_media_header()
+            wiz.header_type = (wiz.template_id.header_format or '').lower() if wiz.needs_media else False
 
     @api.depends('template_id', 'line_ids.source', 'line_ids.field_path', 'line_ids.text',
                  'phone_path', 'phone_override')
@@ -81,6 +83,9 @@ class QualidSendWizard(models.TransientModel):
                 commands.append(Command.create({'sequence': seq, 'component': 'body', 'placeholder': name}))
                 seq += 1
         self.line_ids = commands
+        if tpl and tpl._qualid_has_media_header():
+            header = (tpl.header_format or '').lower()
+            self.qualid_media_source = 'report' if header == 'document' else 'image_field' if header == 'image' else 'attachment'
 
     def action_send(self):
         self.ensure_one()
@@ -89,12 +94,13 @@ class QualidSendWizard(models.TransientModel):
             raise UserError(_('No records selected.'))
         if self.phone_override and len(records) > 1:
             raise UserError(_('A phone number override can only be used with a single record.'))
-        if self.needs_media and not self.media_url:
-            raise UserError(_('This template has a media header — enter a Header Media URL.'))
+        media_error = self._qualid_media_validate(self.template_id)
+        if media_error:
+            raise UserError(media_error)
 
         msgs = self.env['qualid.whatsapp.message']._qualid_enqueue(
             records, self.template_id, self.line_ids,
-            phone_path=self.phone_path, media_url=self.media_url,
+            phone_path=self.phone_path, media_spec=self._qualid_media_spec(self.template_id),
             phone=self.phone_override or None,
             send_now=len(records) == 1,
         )

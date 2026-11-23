@@ -17,13 +17,46 @@
                         <field name="phone_path" placeholder="auto (mobile, phone, partner_id.mobile…)"
                                invisible="phone_override"/>
                         <field name="phone_override" invisible="record_count &gt; 1" placeholder="+20…"/>
-                        <field name="media_url" invisible="not needs_media" required="needs_media"
-                               placeholder="https://…"/>
                     </group>
                     <group invisible="record_count &gt; 1">
                         <field name="preview_phone"/>
                     </group>
                 </group>
+                <!-- ── Header file (image / video / document templates) ── -->
+                <div invisible="not needs_media" class="o_qualid_media_box mt-3">
+                    <div class="o_qualid_media_title">
+                        <i class="fa fa-paperclip me-1"/> Header file — this template needs a
+                        <b><field name="header_type" readonly="1" class="o_qualid_inline"/></b>
+                    </div>
+                    <group>
+                        <field name="qualid_media_source" widget="radio" string="Take the file from"
+                               required="needs_media"/>
+                        <field name="qualid_media_report_id" string="PDF report"
+                               invisible="qualid_media_source != 'report'" required="needs_media and qualid_media_source == 'report'"
+                               domain="[('model', '=', res_model), ('report_type', '=', 'qweb-pdf')]"
+                               options="{'no_create': True, 'no_open': True}"
+                               placeholder="e.g. Invoices, Quotation / Order"/>
+                        <field name="qualid_media_attachment_filter"
+                               invisible="qualid_media_source != 'attachment'"
+                               placeholder="optional — e.g. result, contract"/>
+                        <field name="qualid_media_image_field_id" string="Image field"
+                               invisible="qualid_media_source != 'image_field'" required="needs_media and qualid_media_source == 'image_field'"
+                               domain="[('model', '=', res_model), ('ttype', '=', 'binary')]"
+                               options="{'no_create': True, 'no_open': True}"/>
+                        <field name="qualid_media_url_field_id" string="Field with the link"
+                               invisible="qualid_media_source != 'url_field'" required="needs_media and qualid_media_source == 'url_field'"
+                               domain="[('model', '=', res_model), ('ttype', 'in', ('char', 'text'))]"
+                               options="{'no_create': True, 'no_open': True}"/>
+                        <field name="qualid_media_url" string="File link"
+                               invisible="qualid_media_source != 'url'" required="needs_media and qualid_media_source == 'url'"
+                               placeholder="https://…"/>
+                    </group>
+                    <div class="text-muted small">
+                        <i class="fa fa-lock me-1"/>Files generated in Odoo (PDFs, attachments, images) are uploaded
+                        securely to Quali-D so WhatsApp can deliver them, and are <b>permanently deleted after 30 days</b>.
+                        Images are converted to JPEG automatically. Limits: images 5 MB, videos 16 MB (MP4), documents 100 MB.
+                    </div>
+                </div>
                 <field name="line_ids" nolabel="1" invisible="not template_id">
                     <tree editable="bottom" create="false" delete="false">
                         <field name="sequence" column_invisible="True"/>
