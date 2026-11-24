@@ -102,7 +102,7 @@
                         <setting string="Images, videos and documents"
                                  help="PDFs, attachments and images sent from Odoo are uploaded securely to Quali-D so WhatsApp can deliver them.">
                             <div class="o_qualid_retention">
-                                <i class="fa fa-clock-o me-1"/>Stored for <b>30 days</b>, then <b>permanently deleted</b> on day 31.
+                                <i class="fa fa-comments-o me-1"/>Kept with the conversation, so your team can open them later in the Quali-D inbox.
                             </div>
                             <div class="text-muted small mt-1">
                                 Not counted toward your Quali-D broadcast media storage.

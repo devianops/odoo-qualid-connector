@@ -48,7 +48,7 @@ class QualidWhatsappMessage(models.Model):
     media_field_name = fields.Char('Header Field', readonly=True)
     media_attachment_filter = fields.Char('Attachment Filter', readonly=True)
     media_url = fields.Char('Header File Link', readonly=True,
-                            help='Public link sent to WhatsApp. Files uploaded from Odoo are deleted by Quali-D after 30 days.')
+                            help='Public link sent to WhatsApp. Files uploaded from Odoo are kept with the Quali-D conversation history.')
     media_filename = fields.Char('Header File Name', readonly=True)
 
     action_id = fields.Many2one('ir.actions.server', 'Server Action', readonly=True, ondelete='set null')

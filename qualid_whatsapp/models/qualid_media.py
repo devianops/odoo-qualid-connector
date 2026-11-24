@@ -4,7 +4,7 @@
 The same configuration is used by server actions (automation rules) and the
 manual send wizard. Files that only exist inside Odoo (reports, attachments,
 image fields) are uploaded to Quali-D, which returns a public link WhatsApp can
-download. Quali-D deletes those files after 30 days.
+download. Quali-D keeps them with the conversation history.
 """
 import base64
 import io

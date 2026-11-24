@@ -53,7 +53,7 @@
                     </group>
                     <div class="text-muted small">
                         <i class="fa fa-lock me-1"/>Files generated in Odoo (PDFs, attachments, images) are uploaded
-                        securely to Quali-D so WhatsApp can deliver them, and are <b>permanently deleted after 30 days</b>.
+                        securely to Quali-D so WhatsApp can deliver them, and stay available in your Quali-D conversation history.
                         Images are converted to JPEG automatically. Limits: images 5 MB, videos 16 MB (MP4), documents 100 MB.
                     </div>
                 </div>
