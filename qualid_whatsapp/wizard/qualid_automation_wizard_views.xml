@@ -8,6 +8,7 @@
                 <field name="model_name" invisible="1"/>
                 <field name="needs_media" invisible="1"/>
                 <field name="preset_has_report" invisible="1"/>
+                <field name="has_variables" invisible="1"/>
 
                 <group>
                     <field name="preset" widget="selection" placeholder="Choose what should trigger the message…"/>
@@ -49,7 +50,7 @@
                     </group>
                 </div>
 
-                <div invisible="not template_id">
+                <div invisible="not has_variables">
                     <div class="fw-bold mb-1">Template variables</div>
                     <div class="text-muted small mb-1">Suggested fields are filled in — change any of them if needed.</div>
                     <field name="line_ids" nolabel="1">

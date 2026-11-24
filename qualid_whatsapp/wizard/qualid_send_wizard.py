@@ -23,6 +23,7 @@ class QualidSendWizard(models.TransientModel):
     )
     needs_media = fields.Boolean(compute='_compute_needs_media')
     header_type = fields.Char(compute='_compute_needs_media')
+    has_variables = fields.Boolean(compute='_compute_needs_media')
     line_ids = fields.One2many('qualid.send.wizard.line', 'wizard_id', 'Variables')
     preview_phone = fields.Char(compute='_compute_preview', string='Recipient')
     preview_text = fields.Text(compute='_compute_preview', string='Preview')
@@ -51,6 +52,7 @@ class QualidSendWizard(models.TransientModel):
     @api.depends('template_id')
     def _compute_needs_media(self):
         for wiz in self:
+            wiz.has_variables = bool(wiz.template_id) and wiz.template_id._qualid_has_variables()
             wiz.needs_media = bool(wiz.template_id) and wiz.template_id._qualid_has_media_header()
             wiz.header_type = (wiz.template_id.header_format or '').lower() if wiz.needs_media else False
 
@@ -85,7 +87,17 @@ class QualidSendWizard(models.TransientModel):
         self.line_ids = commands
         if tpl and tpl._qualid_has_media_header():
             header = (tpl.header_format or '').lower()
-            self.qualid_media_source = 'report' if header == 'document' else 'image_field' if header == 'image' else 'attachment'
+            if header == 'image':
+                self.qualid_media_source = 'image_field'
+            elif header == 'document' and self._qualid_model_has_pdf_report():
+                self.qualid_media_source = 'report'
+            else:
+                # No printable PDF for this model (e.g. contacts) — "PDF of this record" could never work.
+                self.qualid_media_source = 'attachment'
+
+    def _qualid_model_has_pdf_report(self):
+        return bool(self.res_model) and bool(self.env['ir.actions.report'].sudo().search_count(
+            [('model', '=', self.res_model), ('report_type', '=', 'qweb-pdf')]))
 
     def action_send(self):
         self.ensure_one()

@@ -137,6 +137,7 @@ class QualidAutomationWizard(models.TransientModel):
     template_id = fields.Many2one('qualid.whatsapp.template', 'WhatsApp Template', required=True)
     needs_media = fields.Boolean(compute='_compute_needs_media')
     header_type = fields.Char(compute='_compute_needs_media')
+    has_variables = fields.Boolean(compute='_compute_needs_media')
     line_ids = fields.One2many('qualid.automation.wizard.line', 'wizard_id', 'Variables')
     phone_path = fields.Char(
         'Phone Field',
@@ -159,6 +160,7 @@ class QualidAutomationWizard(models.TransientModel):
     @api.depends('template_id')
     def _compute_needs_media(self):
         for wiz in self:
+            wiz.has_variables = bool(wiz.template_id) and wiz.template_id._qualid_has_variables()
             wiz.needs_media = bool(wiz.template_id) and wiz.template_id._qualid_has_media_header()
             wiz.header_type = (wiz.template_id.header_format or '').lower() if wiz.needs_media else False
 

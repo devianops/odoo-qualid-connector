@@ -32,11 +32,13 @@ class IrActionsServer(models.Model):
     )
     qualid_template_needs_media = fields.Boolean(compute='_compute_qualid_template_needs_media')
     qualid_template_header_type = fields.Char(compute='_compute_qualid_template_needs_media')
+    qualid_template_has_variables = fields.Boolean(compute='_compute_qualid_template_needs_media')
 
     @api.depends('qualid_template_id')
     def _compute_qualid_template_needs_media(self):
         for action in self:
             tpl = action.qualid_template_id
+            action.qualid_template_has_variables = bool(tpl) and tpl._qualid_has_variables()
             action.qualid_template_needs_media = bool(tpl) and tpl._qualid_has_media_header()
             action.qualid_template_header_type = (tpl.header_format or '').lower() if action.qualid_template_needs_media else False
 
