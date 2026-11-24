@@ -70,19 +70,26 @@ class ResConfigSettings(models.TransientModel):
     def _qualid_notify(self, message, ntype='success', reload=False):
         params = {'title': _('Quali-D'), 'message': message, 'type': ntype, 'sticky': ntype != 'success'}
         if reload:
-            params['next'] = {'type': 'ir.actions.client', 'tag': 'reload'}
+            # Reopen Settings on the Quali-D section (a plain web-client reload lands on General Settings)
+            params['next'] = self.env['ir.actions.act_window']._for_xml_id('qualid_whatsapp.action_qualid_settings')
         return {'type': 'ir.actions.client', 'tag': 'display_notification', 'params': params}
 
     def action_qualid_test_connection(self):
+        """Used by both "Connect" (not connected yet) and "Test Connection"."""
         self.ensure_one()
-        self.set_values()  # persist what was just typed before testing
+        icp = self.env['ir.config_parameter'].sudo()
+        was_connected = bool((icp.get_param(PARAM_TOKEN) or '').strip() and (icp.get_param(PARAM_ACCOUNT_EMAIL) or '').strip())
+        self.set_values()  # persist what was just typed (a new token is verified + templates synced here)
         data = self._qualid_verify()
         if data.get('success'):
-            return self._qualid_notify(_(
-                'Connected to Quali-D account %(email)s (token "%(token)s").',
-                email=data.get('account_email') or '-', token=data.get('token_name') or '-',
-            ), reload=True)
-        return self._qualid_notify(data.get('message') or _('Connection failed.'), 'danger', reload=True)
+            msg = _('Connected to Quali-D account %(email)s (token "%(token)s").',
+                    email=data.get('account_email') or '-', token=data.get('token_name') or '-')
+            if not was_connected:
+                msg += ' ' + _('%s approved templates imported.', self.env['qualid.whatsapp.template'].search_count([]))
+            # The page layout changes on first connect, so reopen it; a plain test only needs the message.
+            return self._qualid_notify(msg, reload=not was_connected)
+        return self._qualid_notify(data.get('message') or _('Connection failed. Check the token and try again.'),
+                                   'danger', reload=was_connected)
 
     def action_qualid_sync_templates(self):
         self.ensure_one()
