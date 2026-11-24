@@ -281,6 +281,12 @@
                                     who agreed to receive WhatsApp messages.
                                 </div>
                                 <div class="o_qualid_tip">
+                                    <b><i class="fa fa-pencil me-1"/>Changing an automation</b>
+                                    My Automations → open the rule. Use <b>Apply on</b> to limit which records count
+                                    (e.g. add <i>Type is Customer Invoice</i>), open the WhatsApp action to change the template,
+                                    variables or file, or untick <b>Active</b> to pause it.
+                                </div>
+                                <div class="o_qualid_tip">
                                     <b><i class="fa fa-wrench me-1"/>Build your own</b>
                                     My Automations → New → choose any model and trigger → Add an action →
                                     <b>Send WhatsApp (Quali-D)</b>. Works with any app, including custom ones.

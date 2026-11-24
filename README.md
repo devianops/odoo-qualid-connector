@@ -9,9 +9,10 @@ Send approved WhatsApp Business templates from Odoo through [Quali-D](https://qu
 
 ## Features
 
-- **Automation Rules**: a new server action type, *Send WhatsApp (Quali-D)*, that works with any trigger.
+- **Ready-made automations**: one click sets up a complete rule. There are 12 recipes: invoice confirmed or paid, payment and overdue reminders, quotation sent, order confirmed, delivery done, new lead, opportunity won, new contact, purchase order, and task done.
+- **Automation Rules**: a new server action type, *Send WhatsApp (Quali-D)*, that works with any model and any trigger.
 - **Variable mapping**: fill template variables from record fields, including dotted relations like `partner_id.name`, or from fixed text.
-- **Media headers**: image, video and document templates are supported.
+- **Header files**: image, video and document templates are supported. The file can be a PDF of the record (invoice, quotation, delivery slip…), its latest attachment, an image field, or a link. Files are kept with the Quali-D conversation history.
 - **Background queue**: sends go through a queue with automatic retries (1 min, then 5 min). You can choose immediate sending instead.
 - **Send only once per record**: protects against duplicate triggers. Every send also carries a stable idempotency key, so a retry never sends twice.
 - **Manual send wizard**: on Contacts, for one record or in bulk. For any other model, use *Create Contextual Action* on a server action.
@@ -22,17 +23,31 @@ Send approved WhatsApp Business templates from Odoo through [Quali-D](https://qu
 1. Copy `qualid_whatsapp/` into your addons path. On Odoo.sh, add this repo as a submodule.
 2. Restart Odoo, update the Apps list and install **Quali-D WhatsApp**.
 3. In Quali-D, open **Settings → Odoo Connector** and click **New Token**. Copy the token; it is shown only once.
-4. In Odoo, open **Settings → Quali-D WhatsApp**, paste the token, then click **Test Connection** and **Sync Templates**.
+4. In Odoo, open **Settings → Quali-D WhatsApp**, paste the token and save. Templates are imported automatically, and re-synced every hour.
 
 Recommended: add your Odoo server's public IP to the token's **Allowed IPs** in Quali-D.
 
-## Usage: Automation Rule
+## Usage: ready-made automations
 
-1. Open **Settings → Technical → Automation Rules** (or **Quali-D WhatsApp → Configuration → Automation Rules**) and click **New**.
+1. Open **Settings → Quali-D WhatsApp → Automations** and click **Set up** next to a recipe. Recipes for apps that aren't installed are marked *Install …*.
+2. Pick a template. The trigger, the filters (for example, customer invoices only), the PDF and suggested variables are filled in. Change any variable if needed.
+3. Click **Create Automation**. The finished rule opens so you can review it.
+
+## Usage: your own automation rule
+
+1. Open **My Automations** (or **Quali-D WhatsApp → Configuration → Automation Rules**) and click **New**.
 2. Choose a model (e.g. *Sales Order*) and a trigger (e.g. *State is set to Sales Order*).
 3. Add an action of type **Send WhatsApp (Quali-D)**.
 4. Pick a template. One row appears per template variable; map each row to a field, e.g. `partner_id.name`, `name`, `amount_total`.
 5. Optionally set **Phone Field**. If left empty, the module tries `mobile`, `phone`, `partner_id.mobile` and `partner_id.phone`.
+
+## Changing an automation
+
+Open **My Automations** and click the rule.
+
+- **Apply on** limits which records count. For example, a rule on *State is set to Posted* also matches vendor bills until you add *Type is Customer Invoice*.
+- Open the **Send WhatsApp** action to change the template, the variables or the header file.
+- Untick **Active** to pause the rule without deleting it.
 
 ## Usage: Odoo Online (webhook)
 
