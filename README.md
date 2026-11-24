@@ -85,12 +85,14 @@ Error responses carry an `error_code`. Common values are `ODOO_TOKEN_INVALID`, `
 
 ## Version branches
 
-| Branch | Odoo | Status |
+Use the branch that matches your Odoo version. All four pass the same test suite: install, settings page, ready-made automations, rules firing (including PDF headers), empty-variable protection and the send wizard.
+
+| Branch | Odoo | Notes |
 |---|---|---|
 | `17.0` | 17.0 | Primary development version |
-| `18.0` | 18.0 | Port: rename `<tree>` → `<list>` and `view_mode` `tree` → `list`; remove `numbercall`/`doall` from the cron |
-| `19.0` | 19.0 | Port from 18.0 (`res.partner.mobile` was removed, and phone auto-detection already falls back to `phone`) |
-| `16.0` | 16.0 | Port: replace `invisible="expr"` with `attrs`, and the settings `<app>`/`<setting>` blocks with the 16 `app_settings_block` layout |
+| `18.0` | 18.0 | Same features. The invoice report is called *Invoice PDF* |
+| `19.0` | 19.0 | Same features. Odoo 19 removed `mobile`, so contacts and leads use `phone`. "Before the due date" reminders use the *Before* delay mode |
+| `16.0` | 16.0 | Same features. Odoo 16 has no "State is set to" trigger, so recipes use *On Creation & Update* on the State field instead. Choose the action type in the rule's *Action To Do* field |
 
 ## License
 
