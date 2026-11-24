@@ -58,14 +58,14 @@
                     </div>
                 </div>
                 <field name="line_ids" nolabel="1" invisible="not template_id">
-                    <tree editable="bottom" create="false" delete="false">
+                    <list editable="bottom" create="false" delete="false">
                         <field name="sequence" column_invisible="True"/>
                         <field name="component" readonly="1" force_save="1"/>
                         <field name="placeholder" readonly="1" force_save="1" string="Variable"/>
                         <field name="source"/>
                         <field name="field_path" invisible="source != 'field'" placeholder="e.g. name"/>
                         <field name="text" invisible="source != 'text'"/>
-                    </tree>
+                    </list>
                 </field>
                 <group invisible="not template_id or record_count &gt; 1">
                     <field name="preview_text" nolabel="1" colspan="2" readonly="1"/>

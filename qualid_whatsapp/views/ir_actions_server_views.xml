@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <field name="qualid_param_ids" nolabel="1" invisible="not qualid_template_id">
-                        <tree editable="bottom" create="false" delete="false">
+                        <list editable="bottom" create="false" delete="false">
                             <field name="sequence" column_invisible="True"/>
                             <field name="component" readonly="1" force_save="1"/>
                             <field name="placeholder" readonly="1" force_save="1" string="Variable"/>
@@ -72,7 +72,7 @@
                                    required="source == 'field'" placeholder="e.g. partner_id.name"/>
                             <field name="text" invisible="source != 'text'"
                                    required="source == 'text'" placeholder="Fixed text"/>
-                        </tree>
+                        </list>
                     </field>
                     <div class="text-muted small" invisible="not qualid_template_id">
                         Use technical field names; follow relations with dots (partner_id.name, user_id.name, amount_total).

@@ -4,7 +4,7 @@
         <field name="name">qualid.whatsapp.message.tree</field>
         <field name="model">qualid.whatsapp.message</field>
         <field name="arch" type="xml">
-            <tree string="WhatsApp Messages" create="false" edit="false"
+            <list string="WhatsApp Messages" create="false" edit="false"
                   decoration-success="state == 'sent'" decoration-danger="state == 'failed'"
                   decoration-muted="state == 'cancel'" decoration-warning="state == 'queued'">
                 <field name="create_date" string="Date"/>
@@ -18,7 +18,7 @@
                        decoration-warning="state == 'queued'"/>
                 <field name="attempts" optional="hide"/>
                 <field name="error_message" optional="show"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -109,7 +109,7 @@
     <record id="action_qualid_message" model="ir.actions.act_window">
         <field name="name">WhatsApp Messages</field>
         <field name="res_model">qualid.whatsapp.message</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">No WhatsApp messages sent yet</p>
             <p>Messages sent from automation rules, server actions or the Send wizard appear here.</p>
