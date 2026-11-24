@@ -50,7 +50,7 @@
                         <div class="o_qualid_step">
                             <span class="o_qualid_step_num">2</span>
                             <div>
-                                <b>Paste it below and save</b>
+                                <b>Paste it below and click Connect</b>
                                 <div class="text-muted">Your templates are imported automatically</div>
                             </div>
                         </div>
@@ -68,8 +68,13 @@
                                  help="Paste the token you created in your Quali-D dashboard. Keep it private — you can rotate or revoke it at any time.">
                             <field name="qualid_api_token" password="True" placeholder="odoo_qd_…"/>
                             <div class="o_qualid_actions">
-                                <button name="action_qualid_test_connection" type="object"
-                                        string="Test Connection" icon="fa-plug" class="btn btn-primary btn-sm o_qualid_btn"/>
+                                <!-- noSaveDialog: save the typed token silently instead of asking "save changes?" -->
+                                <button name="action_qualid_test_connection" type="object" noSaveDialog="1"
+                                        invisible="qualid_connected"
+                                        string="Connect" icon="fa-plug" class="btn btn-primary btn-sm o_qualid_btn"/>
+                                <button name="action_qualid_test_connection" type="object" noSaveDialog="1"
+                                        invisible="not qualid_connected"
+                                        string="Test Connection" icon="fa-check" class="btn btn-secondary btn-sm"/>
                                 <a href="https://dashboard.quali-d.com/settings/odoo-connector" target="_blank"
                                    role="button" class="btn btn-link btn-sm">
                                     <i class="fa fa-external-link me-1"/>Get a token
@@ -78,7 +83,7 @@
                         </setting>
                     </block>
 
-                    <block title="WhatsApp Templates" name="qualid_templates">
+                    <block title="WhatsApp Templates" name="qualid_templates" invisible="not qualid_connected">
                         <setting string="Approved Templates"
                                  help="Synced from Quali-D automatically when you save your token and every hour.">
                             <div class="o_qualid_stat">
@@ -118,7 +123,7 @@
                     </block>
 
                     <!-- ── Ready-made automations ── -->
-                    <div class="o_qualid_guide">
+                    <div class="o_qualid_guide" invisible="not qualid_connected">
                         <div class="o_qualid_guide_head">
                             <div>
                                 <div class="o_qualid_guide_title" role="heading" aria-level="2">Automations</div>
