@@ -178,3 +178,138 @@ $qualid-wa: #25d366;
     font-size: 13px;
     color: var(--o-color-gray-800, #343a40);
 }
+
+// Automation guide (settings page)
+.o_qualid_guide {
+    margin: 8px 16px 16px;
+    padding: 20px 24px;
+    border-radius: 14px;
+    border: 1px solid rgba($qualid-blue, 0.22);
+
+    h3 { margin: 0 0 4px; font-size: 18px; }
+    h4 { margin: 20px 0 10px; font-size: 15px; }
+
+    .o_qualid_guide_head {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+
+        > div:first-child { max-width: 720px; }
+        .o_qualid_actions { margin-top: 0; }
+    }
+
+    .o_qualid_howto {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 10px;
+        margin: 16px 0;
+        font-size: 13px;
+
+        > div {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+    }
+
+    .o_qualid_step_num {
+        flex-shrink: 0;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: $qualid-blue;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .o_qualid_recipes {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .o_qualid_recipe {
+        border: 1px solid var(--o-color-gray-300, #dee2e6);
+        border-radius: 8px;
+
+        summary {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 600;
+            list-style: none;
+
+            &::-webkit-details-marker { display: none; }
+            &::after {
+                content: '\f107'; // fa-angle-down
+                font-family: FontAwesome;
+                margin-left: 8px;
+                color: var(--o-color-gray-600, #6c757d);
+            }
+            > i { color: $qualid-blue; width: 16px; text-align: center; }
+        }
+
+        &[open] summary {
+            border-bottom: 1px solid var(--o-color-gray-200, #e9ecef);
+            &::after { content: '\f106'; } // fa-angle-up
+        }
+
+        .o_qualid_app {
+            margin-left: auto;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: rgba($qualid-blue, 0.10);
+            color: $qualid-blue-dark;
+            white-space: nowrap;
+        }
+
+        table {
+            margin: 0;
+            font-size: 13px;
+
+            th {
+                width: 120px;
+                font-weight: 600;
+                color: var(--o-color-gray-700, #495057);
+                padding-left: 14px;
+            }
+            td, th { border: 0; vertical-align: top; }
+        }
+    }
+
+    .o_qualid_tips {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 10px;
+
+        .o_qualid_tip {
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: rgba($qualid-blue, 0.04);
+            font-size: 13px;
+
+            > b:first-child {
+                display: block;
+                margin-bottom: 4px;
+            }
+        }
+    }
+
+    code {
+        font-size: 12px;
+        padding: 1px 5px;
+        border-radius: 4px;
+        background: rgba($qualid-blue, 0.08);
+        color: $qualid-blue-dark;
+    }
+}

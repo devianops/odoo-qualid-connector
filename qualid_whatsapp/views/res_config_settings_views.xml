@@ -111,6 +111,186 @@
                         </setting>
                     </block>
 
+                    <!-- ── Automation guide ── -->
+                    <div class="o_qualid_guide">
+                        <div class="o_qualid_guide_head">
+                            <div>
+                                <h3>Send WhatsApp automatically</h3>
+                                <div class="text-muted">
+                                    An <b>Automation Rule</b> watches for something to happen in Odoo (an invoice is confirmed, a lead is won, a due date arrives…)
+                                    and then runs the action <b>Send WhatsApp (Quali-D)</b>. Pick a recipe below and copy its settings.
+                                </div>
+                            </div>
+                            <div class="o_qualid_actions">
+                                <button name="%(base_automation.base_automation_act)d" type="action"
+                                        string="Open Automation Rules" icon="fa-bolt" class="btn btn-primary btn-sm o_qualid_btn"/>
+                                <button name="%(base.action_server_action)d" type="action"
+                                        string="Open Server Actions" icon="fa-cogs" class="btn btn-link btn-sm"/>
+                            </div>
+                        </div>
+
+                        <div class="o_qualid_howto">
+                            <div><span class="o_qualid_step_num">1</span>Automation Rules → <b>New</b>. Choose the <b>Model</b> (what the rule watches) and the <b>Trigger</b> (when it fires).</div>
+                            <div><span class="o_qualid_step_num">2</span>Optional: fill <b>Apply on</b> to limit which records count (e.g. customer invoices only).</div>
+                            <div><span class="o_qualid_step_num">3</span><b>Add an action</b> → Type <b>Send WhatsApp (Quali-D)</b> → choose the template, header file and variables.</div>
+                            <div><span class="o_qualid_step_num">4</span>Save, then try it on <b>one</b> record and check <b>Sent Messages</b>.</div>
+                        </div>
+
+                        <div class="o_qualid_recipes">
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-file-text-o"/>Invoice confirmed → send the invoice PDF<span class="o_qualid_app">Invoicing</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Model</th><td>Journal Entry</td></tr>
+                                    <tr><th>Trigger</th><td>State is set to → <b>Posted</b></td></tr>
+                                    <tr><th>Apply on</th><td>Type = Customer Invoice <span class="text-muted">(otherwise vendor bills fire too)</span></td></tr>
+                                    <tr><th>Template</th><td>One with a <b>Document</b> header</td></tr>
+                                    <tr><th>Header file</th><td>PDF of this record → <b>Invoices</b></td></tr>
+                                    <tr><th>Variables</th><td><code>partner_id.name</code>, <code>name</code>, <code>amount_total</code>, <code>currency_id.name</code>, <code>invoice_date_due</code></td></tr>
+                                </table>
+                            </details>
+
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-check-circle-o"/>Invoice paid → thank you / receipt<span class="o_qualid_app">Invoicing</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Model</th><td>Journal Entry</td></tr>
+                                    <tr><th>Trigger</th><td><b>On save</b> → When updating: <b>Payment Status</b></td></tr>
+                                    <tr><th>Apply on</th><td>Payment Status is in <b>Paid, In Payment</b> · Type = Customer Invoice</td></tr>
+                                    <tr><th>Header file</th><td>If the template has a Document header: PDF of this record → <b>Invoices</b> (shows the payment)</td></tr>
+                                    <tr><th>Variables</th><td><code>partner_id.name</code>, <code>name</code>, <code>amount_total</code></td></tr>
+                                    <tr><th>Tip</th><td>Keep <b>Send Only Once Per Record</b> ticked so partial payments don't send twice.</td></tr>
+                                </table>
+                            </details>
+
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-bell-o"/>Payment reminder before / after the due date<span class="o_qualid_app">Invoicing</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Model</th><td>Journal Entry</td></tr>
+                                    <tr><th>Trigger</th><td><b>Based on date field</b> → Date Field: <b>Due Date</b> · Delay: <b>3 Days</b> (after) or <b>-2 Days</b> (before)</td></tr>
+                                    <tr><th>Apply on</th><td>Status = Posted · Payment Status = <b>Not Paid</b> · Type = Customer Invoice</td></tr>
+                                    <tr><th>Variables</th><td><code>partner_id.name</code>, <code>name</code>, <code>amount_residual</code> (amount still due), <code>invoice_date_due</code></td></tr>
+                                    <tr><th>Note</th><td>Odoo checks date rules every <b>4 hours</b>, so the message goes out within a few hours of the moment, not to the minute.</td></tr>
+                                </table>
+                            </details>
+
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-shopping-cart"/>Quotation sent / order confirmed<span class="o_qualid_app">Sales</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Model</th><td>Sales Order</td></tr>
+                                    <tr><th>Trigger</th><td>State is set to → <b>Sales Order</b> (confirmed) or <b>Quotation Sent</b></td></tr>
+                                    <tr><th>Header file</th><td>PDF of this record → <b>Quotation / Order</b></td></tr>
+                                    <tr><th>Variables</th><td><code>partner_id.name</code>, <code>name</code>, <code>amount_total</code>, <code>user_id.name</code> (salesperson)</td></tr>
+                                </table>
+                            </details>
+
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-truck"/>Order shipped / delivered<span class="o_qualid_app">Inventory</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Model</th><td>Transfer</td></tr>
+                                    <tr><th>Trigger</th><td>State is set to → <b>Done</b></td></tr>
+                                    <tr><th>Apply on</th><td>Type of Operation = <b>Delivery</b> <span class="text-muted">(skips receipts and internal moves)</span></td></tr>
+                                    <tr><th>Header file</th><td>PDF of this record → <b>Delivery Slip</b></td></tr>
+                                    <tr><th>Variables</th><td><code>partner_id.name</code>, <code>name</code>, <code>origin</code> (the order number)</td></tr>
+                                </table>
+                            </details>
+
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-handshake-o"/>Lead won / moved to a stage<span class="o_qualid_app">CRM</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Model</th><td>Lead/Opportunity</td></tr>
+                                    <tr><th>Trigger</th><td><b>Stage is set to</b> → pick the stage (e.g. Won, Proposition)</td></tr>
+                                    <tr><th>Phone</th><td>Automatic — uses the lead's Mobile or Phone</td></tr>
+                                    <tr><th>Variables</th><td><code>contact_name</code>, <code>name</code> (opportunity), <code>user_id.name</code> (salesperson)</td></tr>
+                                </table>
+                            </details>
+
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-user-plus"/>Welcome message for a new contact<span class="o_qualid_app">Contacts</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Model</th><td>Contact</td></tr>
+                                    <tr><th>Trigger</th><td><b>On save</b></td></tr>
+                                    <tr><th>Apply on</th><td>Mobile is set <span class="text-muted">(and e.g. Tags contains "Customer")</span></td></tr>
+                                    <tr><th>Variables</th><td><code>name</code>, <code>company_id.name</code></td></tr>
+                                    <tr><th>Tip</th><td>Keep <b>Send Only Once Per Record</b> ticked — the contact gets one welcome, even if edited later.</td></tr>
+                                </table>
+                            </details>
+
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-shopping-bag"/>Purchase order to a supplier<span class="o_qualid_app">Purchase</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Model</th><td>Purchase Order</td></tr>
+                                    <tr><th>Trigger</th><td>State is set to → <b>Purchase Order</b></td></tr>
+                                    <tr><th>Header file</th><td>PDF of this record → <b>Purchase Order</b></td></tr>
+                                    <tr><th>Variables</th><td><code>partner_id.name</code>, <code>name</code>, <code>date_planned</code></td></tr>
+                                </table>
+                            </details>
+
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-tasks"/>Task or ticket reaches a stage<span class="o_qualid_app">Project · Helpdesk</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Model</th><td>Task (or Helpdesk Ticket)</td></tr>
+                                    <tr><th>Trigger</th><td><b>Stage is set to</b> → e.g. Done / Solved</td></tr>
+                                    <tr><th>Phone</th><td>Automatic — uses the customer on the task / ticket</td></tr>
+                                    <tr><th>Variables</th><td><code>partner_id.name</code>, <code>name</code>, <code>stage_id.name</code></td></tr>
+                                </table>
+                            </details>
+
+                            <details class="o_qualid_recipe">
+                                <summary><i class="fa fa-hand-pointer-o"/>A button to send by hand, on any record<span class="o_qualid_app">Any app</span></summary>
+                                <table class="table table-sm">
+                                    <tr><th>Where</th><td><b>Open Server Actions</b> (button above) → New</td></tr>
+                                    <tr><th>Setup</th><td>Choose the Model, Type <b>Send WhatsApp (Quali-D)</b>, fill the template like in a rule, save</td></tr>
+                                    <tr><th>Then</th><td>Click <b>Create Contextual Action</b>. It appears under <b>⚙ Actions</b> on that model — for one record, or for many selected in a list.</td></tr>
+                                    <tr><th>Contacts</th><td>Already built in: ⚙ Actions → <b>Send WhatsApp Template</b></td></tr>
+                                </table>
+                            </details>
+                        </div>
+
+                        <h4>Good to know</h4>
+                        <div class="o_qualid_tips">
+                            <div class="o_qualid_tip">
+                                <b><i class="fa fa-phone me-1"/>Phone number</b>
+                                Leave <b>Phone Field</b> empty and the number is found automatically: the record's Mobile, then Phone, then its
+                                customer's Mobile / Phone. To use another number, enter its path, e.g. <code>partner_shipping_id.mobile</code>.
+                                Numbers without a country code get your token's default country code.
+                            </div>
+                            <div class="o_qualid_tip">
+                                <b><i class="fa fa-code me-1"/>Variables</b>
+                                Choose <b>Field</b> and type the field's technical name. Dots follow links:
+                                <code>partner_id.name</code> = the customer's name, <code>user_id.name</code> = the salesperson.
+                                Choose <b>Fixed text</b> for words that never change. Dates follow the user's language, amounts have 2 decimals,
+                                and linked records print their name.
+                            </div>
+                            <div class="o_qualid_tip">
+                                <b><i class="fa fa-search me-1"/>Finding a field's name</b>
+                                Turn on <b>developer mode</b> (Settings → Activate the developer mode), then hover any field on a form:
+                                the tooltip shows <b>Field: name</b>. That name is what you type.
+                            </div>
+                            <div class="o_qualid_tip">
+                                <b><i class="fa fa-paperclip me-1"/>Header files</b>
+                                Templates with an image, video or document header need a file:
+                                <b>PDF of this record</b> (invoices, quotations, delivery slips — Document headers),
+                                <b>Latest attachment</b> (anything attached in the chatter),
+                                <b>Image from this record</b> (contact photo, product image — Image headers),
+                                or a <b>link</b> from a field or the same link for everyone.
+                            </div>
+                            <div class="o_qualid_tip">
+                                <b><i class="fa fa-clock-o me-1"/>In background vs. Immediately</b>
+                                <b>In background</b> (recommended) never slows down saving, handles hundreds of records at once and retries failures
+                                automatically. <b>Immediately</b> sends while the record is saved — fine for single records.
+                            </div>
+                            <div class="o_qualid_tip">
+                                <b><i class="fa fa-filter me-1"/>Avoiding unwanted messages</b>
+                                Always narrow the rule with <b>Apply on</b> and keep <b>Send Only Once Per Record</b> ticked.
+                                Marketing templates should only go to customers who agreed to receive WhatsApp messages.
+                            </div>
+                            <div class="o_qualid_tip">
+                                <b><i class="fa fa-life-ring me-1"/>Checking what happened</b>
+                                Each send leaves a note in the record's chatter. <b>Sent Messages</b> lists every message with its status and the
+                                exact error; failed ones can be re-sent with <b>Retry</b>.
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="o_qualid_footer">
                         Need help? <a href="https://quali-d.com" target="_blank">quali-d.com</a>
                     </div>
