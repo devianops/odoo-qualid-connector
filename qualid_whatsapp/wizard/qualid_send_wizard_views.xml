@@ -8,13 +8,14 @@
                 <field name="res_model" invisible="1"/>
                 <field name="res_ids" invisible="1"/>
                 <field name="needs_media" invisible="1"/>
+                <field name="has_variables" invisible="1"/>
                 <div class="alert alert-info" role="alert" invisible="record_count &lt;= 1">
                     <field name="record_count" class="oe_inline" readonly="1"/> records selected — messages will be queued and sent in the background.
                 </div>
                 <group>
                     <group>
                         <field name="template_id" options="{'no_create': True}"/>
-                        <field name="phone_path" placeholder="auto (mobile, phone, partner_id.mobile…)"
+                        <field name="phone_path" placeholder="Automatic"
                                invisible="phone_override"/>
                         <field name="phone_override" invisible="record_count &gt; 1" placeholder="+20…"/>
                     </group>
@@ -57,7 +58,7 @@
                         Images are converted to JPEG automatically. Limits: images 5 MB, videos 16 MB (MP4), documents 100 MB.
                     </div>
                 </div>
-                <field name="line_ids" nolabel="1" invisible="not template_id">
+                <field name="line_ids" nolabel="1" invisible="not has_variables">
                     <tree editable="bottom" create="false" delete="false">
                         <field name="sequence" column_invisible="True"/>
                         <field name="component" readonly="1" force_save="1"/>
