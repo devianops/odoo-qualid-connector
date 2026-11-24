@@ -77,6 +77,10 @@
                                 <button name="action_qualid_test_connection" type="object" noSaveDialog="1"
                                         attrs="{'invisible': [('qualid_connected', '=', False)]}"
                                         string="Test Connection" icon="fa-check" class="btn btn-secondary btn-sm"/>
+                                <button name="action_qualid_disconnect" type="object" noSaveDialog="1"
+                                        attrs="{'invisible': [('qualid_connected', '=', False)]}"
+                                        confirm="Disconnect from Quali-D? The token will be deleted from this database and WhatsApp messages will stop sending until you connect again. Your templates and automations are kept."
+                                        string="Disconnect" icon="fa-unlink" class="btn btn-link btn-sm text-danger"/>
                                 <a href="https://dashboard.quali-d.com/settings/odoo-connector" target="_blank"
                                    role="button" class="btn btn-link btn-sm">
                                     <i class="fa fa-external-link me-1"/>Get a token
