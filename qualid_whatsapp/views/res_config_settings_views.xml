@@ -45,6 +45,7 @@
                             <div>
                                 <b>Create a token in Quali-D</b>
                                 <div class="text-muted">Settings → Odoo Connector → New Token</div>
+                                <div class="text-muted">No account yet? <a href="https://quali-d.com/whatsappconnect" target="_blank">Sign up at quali-d.com/whatsappconnect</a></div>
                             </div>
                         </div>
                         <div class="o_qualid_step">
