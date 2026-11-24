@@ -68,7 +68,7 @@ class ResConfigSettings(models.TransientModel):
                 icp.set_param(PARAM_ACCOUNT_EMAIL, '')
 
     def _qualid_notify(self, message, ntype='success', reload=False):
-        params = {'title': _('Quali-D'), 'message': message, 'type': ntype, 'sticky': ntype != 'success'}
+        params = {'title': _('Quali-D'), 'message': message, 'type': ntype, 'sticky': ntype == 'danger'}
         if reload:
             # Reopen Settings on the Quali-D section (a plain web-client reload lands on General Settings)
             params['next'] = self.env['ir.actions.act_window']._for_xml_id('qualid_whatsapp.action_qualid_settings')
@@ -90,6 +90,15 @@ class ResConfigSettings(models.TransientModel):
             return self._qualid_notify(msg, reload=not was_connected)
         return self._qualid_notify(data.get('message') or _('Connection failed. Check the token and try again.'),
                                    'danger', reload=was_connected)
+
+    def action_qualid_disconnect(self):
+        """Delete the saved token (and account) from this database. Templates and automations are kept."""
+        self.ensure_one()
+        icp = self.env['ir.config_parameter'].sudo()
+        icp.set_param(PARAM_TOKEN, False)          # False removes the parameter row
+        icp.set_param(PARAM_ACCOUNT_EMAIL, False)
+        return self._qualid_notify(_('Disconnected from Quali-D. The token was deleted from this database.'),
+                                   'info', reload=True)
 
     def action_qualid_sync_templates(self):
         self.ensure_one()
