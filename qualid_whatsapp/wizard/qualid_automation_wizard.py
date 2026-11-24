@@ -233,10 +233,12 @@ class QualidAutomationWizard(models.TransientModel):
             vals['trigger_field_ids'] = [Command.set([Fields._get(p['model'], 'state').id])]
             vals['trg_selection_field_id'] = self._qualid_selection_value(p['model'], 'state', p['state_value']).id
         if p['trigger'] == 'on_time':
+            # Odoo 19: the delay must be positive; "before the date" is a separate mode.
             vals.update({
                 'trg_date_id': Fields._get(p['model'], p['date_field']).id,
-                'trg_date_range': p['delay'],
+                'trg_date_range': abs(p['delay']),
                 'trg_date_range_type': 'day',
+                'trg_date_range_mode': 'before' if p['delay'] < 0 else 'after',
             })
         rule = self.env['base.automation'].create(vals)
         # Written after create: Odoo recomputes these from the trigger, we add our extra conditions.

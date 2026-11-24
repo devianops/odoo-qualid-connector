@@ -10,8 +10,8 @@
         <field name="model">ir.actions.server</field>
         <field name="inherit_id" ref="base.view_server_action_form"/>
         <field name="arch" type="xml">
-            <!-- After the whole two-column wrapper, so our block uses the full width -->
-            <xpath expr="//group[@name='action_wrapper']" position="after">
+            <!-- Odoo 19: action details live in <t name="action_content">; add ours before the Code/Help tabs -->
+            <xpath expr="//t[@name='action_content']/notebook" position="before">
                 <div invisible="state != 'qualid_template'" class="o_qualid_action mt-2">
                     <field name="qualid_template_needs_media" invisible="1"/>
                     <group>

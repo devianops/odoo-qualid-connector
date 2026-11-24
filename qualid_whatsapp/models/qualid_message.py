@@ -62,9 +62,10 @@ class QualidWhatsappMessage(models.Model):
     error_code = fields.Char(readonly=True)
     error_message = fields.Text(readonly=True)
 
-    _sql_constraints = [
-        ('idempotency_key_uniq', 'unique(idempotency_key)', 'This message was already queued for this record.'),
-    ]
+    _idempotency_key_uniq = models.Constraint(
+        'unique(idempotency_key)',
+        'This message was already queued for this record.',
+    )
 
     # ------------------------------------------------------------------
     # Queueing

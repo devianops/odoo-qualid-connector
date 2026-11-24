@@ -29,9 +29,10 @@ class QualidWhatsappTemplate(models.Model):
     active = fields.Boolean(default=True)
     last_sync = fields.Datetime(readonly=True)
 
-    _sql_constraints = [
-        ('name_lang_uniq', 'unique(name, language)', 'A template with this name and language already exists.'),
-    ]
+    _name_lang_uniq = models.Constraint(
+        'unique(name, language)',
+        'A template with this name and language already exists.',
+    )
 
     @api.depends('name', 'language', 'body_variable_count')
     def _compute_display_name(self):

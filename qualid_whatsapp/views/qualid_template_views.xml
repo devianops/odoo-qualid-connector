@@ -69,7 +69,7 @@
                 <filter name="utility" string="Utility" domain="[('category', '=', 'UTILITY')]"/>
                 <separator/>
                 <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
-                <group expand="0" string="Group By">
+                <group name="group_by">
                     <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
                     <filter name="group_language" string="Language" context="{'group_by': 'language'}"/>
                 </group>
