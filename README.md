@@ -85,13 +85,14 @@ Error responses carry an `error_code`. Common values are `ODOO_TOKEN_INVALID`, `
 
 ## Version branches
 
-Use the branch that matches your Odoo version. All four pass the same test suite: install, settings page, ready-made automations, rules firing (including PDF headers), empty-variable protection and the send wizard.
+Use the branch that matches your Odoo version. All five pass the same test suite: install, settings page, ready-made automations, rules firing (including PDF headers), empty-variable protection and the send wizard.
 
 | Branch | Odoo | Notes |
 |---|---|---|
 | `17.0` | 17.0 | Primary development version |
 | `18.0` | 18.0 | Same features. The invoice report is called *Invoice PDF* |
 | `19.0` | 19.0 | Same features. Odoo 19 removed `mobile`, so contacts and leads use `phone`. "Before the due date" reminders use the *Before* delay mode |
+| `20.0` | 20.0 | Same features. Odoo 20 needs PostgreSQL 16 or newer. Webhooks send image/file fields as `{"content": "<base64>"}`, which Quali-D also accepts |
 | `16.0` | 16.0 | Same features. Odoo 16 has no "State is set to" trigger, so recipes use *On Creation & Update* on the State field instead. Choose the action type in the rule's *Action To Do* field |
 
 ## License
