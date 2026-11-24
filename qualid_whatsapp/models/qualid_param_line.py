@@ -32,6 +32,9 @@ class QualidParamMixin(models.AbstractModel):
         for line in self:
             line.display_name = '%s {{%s}}' % (line.component or '', line.placeholder or '')
 
+    def name_get(self):  # Odoo 16
+        return [(line.id, '%s {{%s}}' % (line.component or '', line.placeholder or '')) for line in self]
+
     def _qualid_value(self, record):
         self.ensure_one()
         if self.source == 'text':

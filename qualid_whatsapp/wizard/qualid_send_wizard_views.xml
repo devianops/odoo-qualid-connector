@@ -8,48 +8,48 @@
                 <field name="res_model" invisible="1"/>
                 <field name="res_ids" invisible="1"/>
                 <field name="needs_media" invisible="1"/>
-                <div class="alert alert-info" role="alert" invisible="record_count &lt;= 1">
+                <div class="alert alert-info" role="alert" attrs="{'invisible': [('record_count', '&lt;=', 1)]}">
                     <field name="record_count" class="oe_inline" readonly="1"/> records selected — messages will be queued and sent in the background.
                 </div>
                 <group>
                     <group>
                         <field name="template_id" options="{'no_create': True}"/>
-                        <field name="phone_path" placeholder="auto (mobile, phone, partner_id.mobile…)"
-                               invisible="phone_override"/>
-                        <field name="phone_override" invisible="record_count &gt; 1" placeholder="+20…"/>
+                        <field name="phone_path" placeholder="auto (mobile, phone, partner_id.mobile…)" attrs="{'invisible': [('phone_override', '!=', False)]}"
+                              />
+                        <field name="phone_override" placeholder="+20…" attrs="{'invisible': [('record_count', '&gt;', 1)]}"/>
                     </group>
-                    <group invisible="record_count &gt; 1">
+                    <group attrs="{'invisible': [('record_count', '&gt;', 1)]}">
                         <field name="preview_phone"/>
                     </group>
                 </group>
                 <!-- ── Header file (image / video / document templates) ── -->
-                <div invisible="not needs_media" class="o_qualid_media_box mt-3">
+                <div class="o_qualid_media_box mt-3" attrs="{'invisible': [('needs_media', '=', False)]}">
                     <div class="o_qualid_media_title">
                         <i class="fa fa-paperclip me-1"/> Header file — this template needs a
                         <b><field name="header_type" readonly="1" class="o_qualid_inline"/></b>
                     </div>
                     <group>
-                        <field name="qualid_media_source" widget="radio" string="Take the file from"
-                               required="needs_media"/>
+                        <field name="qualid_media_source" widget="radio" string="Take the file from" attrs="{'required': [('needs_media', '!=', False)]}"
+                              />
                         <field name="qualid_media_report_id" string="PDF report"
-                               invisible="qualid_media_source != 'report'" required="needs_media and qualid_media_source == 'report'"
+                              
                                domain="[('model', '=', res_model), ('report_type', '=', 'qweb-pdf')]"
                                options="{'no_create': True, 'no_open': True}"
-                               placeholder="e.g. Invoices, Quotation / Order"/>
+                               placeholder="e.g. Invoices, Quotation / Order" attrs="{'invisible': [('qualid_media_source', '!=', 'report')], 'required': [('needs_media', '!=', False), ('qualid_media_source', '=', 'report')]}"/>
                         <field name="qualid_media_attachment_filter"
-                               invisible="qualid_media_source != 'attachment'"
-                               placeholder="optional — e.g. result, contract"/>
+                              
+                               placeholder="optional — e.g. result, contract" attrs="{'invisible': [('qualid_media_source', '!=', 'attachment')]}"/>
                         <field name="qualid_media_image_field_id" string="Image field"
-                               invisible="qualid_media_source != 'image_field'" required="needs_media and qualid_media_source == 'image_field'"
+                              
                                domain="[('model', '=', res_model), ('ttype', '=', 'binary')]"
-                               options="{'no_create': True, 'no_open': True}"/>
+                               options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('qualid_media_source', '!=', 'image_field')], 'required': [('needs_media', '!=', False), ('qualid_media_source', '=', 'image_field')]}"/>
                         <field name="qualid_media_url_field_id" string="Field with the link"
-                               invisible="qualid_media_source != 'url_field'" required="needs_media and qualid_media_source == 'url_field'"
+                              
                                domain="[('model', '=', res_model), ('ttype', 'in', ('char', 'text'))]"
-                               options="{'no_create': True, 'no_open': True}"/>
+                               options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('qualid_media_source', '!=', 'url_field')], 'required': [('needs_media', '!=', False), ('qualid_media_source', '=', 'url_field')]}"/>
                         <field name="qualid_media_url" string="File link"
-                               invisible="qualid_media_source != 'url'" required="needs_media and qualid_media_source == 'url'"
-                               placeholder="https://…"/>
+                              
+                               placeholder="https://…" attrs="{'invisible': [('qualid_media_source', '!=', 'url')], 'required': [('needs_media', '!=', False), ('qualid_media_source', '=', 'url')]}"/>
                     </group>
                     <div class="text-muted small">
                         <i class="fa fa-lock me-1"/>Files generated in Odoo (PDFs, attachments, images) are uploaded
@@ -57,17 +57,17 @@
                         Images are converted to JPEG automatically. Limits: images 5 MB, videos 16 MB (MP4), documents 100 MB.
                     </div>
                 </div>
-                <field name="line_ids" nolabel="1" invisible="not template_id">
+                <field name="line_ids" nolabel="1" attrs="{'invisible': [('template_id', '=', False)]}">
                     <tree editable="bottom" create="false" delete="false">
-                        <field name="sequence" column_invisible="True"/>
+                        <field name="sequence" invisible="1"/>
                         <field name="component" readonly="1" force_save="1"/>
                         <field name="placeholder" readonly="1" force_save="1" string="Variable"/>
                         <field name="source"/>
-                        <field name="field_path" invisible="source != 'field'" placeholder="e.g. name"/>
-                        <field name="text" invisible="source != 'text'"/>
+                        <field name="field_path" placeholder="e.g. name" attrs="{'invisible': [('source', '!=', 'field')]}"/>
+                        <field name="text" attrs="{'invisible': [('source', '!=', 'text')]}"/>
                     </tree>
                 </field>
-                <group invisible="not template_id or record_count &gt; 1">
+                <group attrs="{'invisible': ['|', ('template_id', '=', False), ('record_count', '&gt;', 1)]}">
                     <field name="preview_text" nolabel="1" colspan="2" readonly="1"/>
                 </group>
                 <footer>

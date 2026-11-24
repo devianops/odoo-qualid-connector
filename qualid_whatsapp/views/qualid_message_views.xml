@@ -29,15 +29,15 @@
             <form string="WhatsApp Message" create="false" edit="false">
                 <header>
                     <button name="action_retry" type="object" string="Retry" class="btn-primary"
-                            invisible="state not in ('failed', 'cancel')" groups="base.group_system"/>
+                            groups="base.group_system" attrs="{'invisible': [('state', 'not in', ['failed', 'cancel'])]}"/>
                     <button name="action_cancel" type="object" string="Cancel"
-                            invisible="state != 'queued'" groups="base.group_system"/>
+                            groups="base.group_system" attrs="{'invisible': [('state', '!=', 'queued')]}"/>
                     <field name="state" widget="statusbar" statusbar_visible="queued,sent"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_open_record" type="object" class="oe_stat_button" icon="fa-file-o"
-                                invisible="not res_id">
+                        <button name="action_open_record" type="object" class="oe_stat_button" icon="fa-file-o" attrs="{'invisible': [('res_id', '=', False)]}"
+                               >
                             <span>Document</span>
                         </button>
                     </div>
@@ -57,7 +57,7 @@
                             <field name="create_date"/>
                             <field name="sent_date"/>
                             <field name="attempts"/>
-                            <field name="next_attempt" invisible="state != 'queued'"/>
+                            <field name="next_attempt" attrs="{'invisible': [('state', '!=', 'queued')]}"/>
                             <field name="wa_message_id"/>
                             <field name="qualid_log_id"/>
                             <field name="action_id"/>
@@ -67,14 +67,14 @@
                         <field name="header_text"/>
                         <field name="body_params"/>
                         <field name="media_type"/>
-                        <field name="media_source" invisible="not media_type"/>
-                        <field name="media_report_id" invisible="media_source != 'report'"/>
-                        <field name="media_field_name" invisible="media_source not in ('image_field', 'url_field')"/>
-                        <field name="media_attachment_filter" invisible="media_source != 'attachment'"/>
-                        <field name="media_filename" invisible="not media_filename"/>
-                        <field name="media_url" widget="url" invisible="not media_url"/>
+                        <field name="media_source" attrs="{'invisible': [('media_type', '=', False)]}"/>
+                        <field name="media_report_id" attrs="{'invisible': [('media_source', '!=', 'report')]}"/>
+                        <field name="media_field_name" attrs="{'invisible': [('media_source', 'not in', ['image_field', 'url_field'])]}"/>
+                        <field name="media_attachment_filter" attrs="{'invisible': [('media_source', '!=', 'attachment')]}"/>
+                        <field name="media_filename" attrs="{'invisible': [('media_filename', '=', False)]}"/>
+                        <field name="media_url" widget="url" attrs="{'invisible': [('media_url', '=', False)]}"/>
                     </group>
-                    <group string="Error" invisible="not error_code and not error_message">
+                    <group string="Error" attrs="{'invisible': [('error_code', '=', False), ('error_message', '=', False)]}">
                         <field name="error_code"/>
                         <field name="error_message"/>
                     </group>

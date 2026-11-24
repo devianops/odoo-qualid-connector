@@ -38,6 +38,9 @@ class QualidWhatsappTemplate(models.Model):
         for tpl in self:
             tpl.display_name = '%s (%s)' % (tpl.name or '', tpl.language or '')
 
+    def name_get(self):  # Odoo 16: many2one fields still use name_get
+        return [(tpl.id, '%s (%s)' % (tpl.name or '', tpl.language or '')) for tpl in self]
+
     def _qualid_body_variable_names(self):
         self.ensure_one()
         try:

@@ -6,8 +6,7 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <app data-string="Quali-D WhatsApp" string="Quali-D WhatsApp" name="qualid_whatsapp"
-                     logo="/qualid_whatsapp/static/description/icon.png" groups="base.group_system">
+                <div class="app_settings_block" data-string="Quali-D WhatsApp" string="Quali-D WhatsApp" data-key="qualid_whatsapp" groups="base.group_system">
 
                     <field name="qualid_connected" invisible="1"/>
                     <field name="qualid_app_account" invisible="1"/>
@@ -26,20 +25,20 @@
                             </div>
                         </div>
                         <div class="o_qualid_status">
-                            <span class="o_qualid_pill o_qualid_pill_ok" invisible="not qualid_connected">
+                            <span class="o_qualid_pill o_qualid_pill_ok" attrs="{'invisible': [('qualid_connected', '=', False)]}">
                                 <i class="fa fa-check-circle me-1"/>Connected
                             </span>
-                            <span class="o_qualid_pill o_qualid_pill_off" invisible="qualid_connected">
+                            <span class="o_qualid_pill o_qualid_pill_off" attrs="{'invisible': [('qualid_connected', '!=', False)]}">
                                 <i class="fa fa-plug me-1"/>Not connected
                             </span>
-                            <div class="o_qualid_account" invisible="not qualid_connected">
+                            <div class="o_qualid_account" attrs="{'invisible': [('qualid_connected', '=', False)]}">
                                 <field name="qualid_account_email" readonly="1" class="o_qualid_inline"/>
                             </div>
                         </div>
                     </div>
 
                     <!-- ── Getting started (shown until connected) ── -->
-                    <div class="o_qualid_steps" invisible="qualid_connected">
+                    <div class="o_qualid_steps" attrs="{'invisible': [('qualid_connected', '!=', False)]}">
                         <div class="o_qualid_step">
                             <span class="o_qualid_step_num">1</span>
                             <div>
@@ -63,9 +62,12 @@
                         </div>
                     </div>
 
-                    <block title="Connection" name="qualid_connection">
-                        <setting string="Quali-D Token"
-                                 help="Paste the token you created in your Quali-D dashboard. Keep it private — you can rotate or revoke it at any time.">
+                    <h2>Connection</h2>
+                    <div class="row mt16 o_settings_container" name="qualid_connection">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                            <span class="o_form_label">Quali-D Token</span>
+                            <div class="text-muted">Paste the token you created in your Quali-D dashboard. Keep it private — you can rotate or revoke it at any time.</div>
                             <field name="qualid_api_token" password="True" placeholder="odoo_qd_…"/>
                             <div class="o_qualid_actions">
                                 <button name="action_qualid_test_connection" type="object"
@@ -75,17 +77,21 @@
                                     <i class="fa fa-external-link me-1"/>Get a token
                                 </a>
                             </div>
-                        </setting>
-                    </block>
+                        </div>
+                        </div>
+                    </div>
 
-                    <block title="WhatsApp Templates" name="qualid_templates">
-                        <setting string="Approved Templates"
-                                 help="Synced from Quali-D automatically when you save your token and every hour.">
+                    <h2>WhatsApp Templates</h2>
+                    <div class="row mt16 o_settings_container" name="qualid_templates">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                            <span class="o_form_label">Approved Templates</span>
+                            <div class="text-muted">Synced from Quali-D automatically when you save your token and every hour.</div>
                             <div class="o_qualid_stat">
                                 <span class="o_qualid_stat_num"><field name="qualid_template_count" readonly="1"/></span>
                                 <span class="o_qualid_stat_label">templates ready to use</span>
                             </div>
-                            <div class="text-muted small" invisible="not qualid_last_sync">
+                            <div class="text-muted small" attrs="{'invisible': [('qualid_last_sync', '=', False)]}">
                                 Last synced <field name="qualid_last_sync" readonly="1" class="o_qualid_inline"/>
                             </div>
                             <div class="o_qualid_actions">
@@ -94,19 +100,26 @@
                                 <button name="%(qualid_whatsapp.action_qualid_template)d" type="action"
                                         string="View Templates" icon="fa-list" class="btn btn-link btn-sm"/>
                             </div>
-                        </setting>
-                        <setting string="Sent Messages"
-                                 help="Every message sent from Odoo, with its delivery status and any error.">
+                        </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                            <span class="o_form_label">Sent Messages</span>
+                            <div class="text-muted">Every message sent from Odoo, with its delivery status and any error.</div>
                             <div class="o_qualid_actions">
                                 <button name="%(qualid_whatsapp.action_qualid_message)d" type="action"
                                         string="Open Message Log" icon="fa-whatsapp" class="btn btn-link btn-sm"/>
                             </div>
-                        </setting>
-                    </block>
+                        </div>
+                        </div>
+                    </div>
 
-                    <block title="Files &amp; Privacy" name="qualid_files">
-                        <setting string="Images, videos and documents"
-                                 help="PDFs, attachments and images sent from Odoo are uploaded securely to Quali-D so WhatsApp can deliver them.">
+                    <h2>Files &amp; Privacy</h2>
+                    <div class="row mt16 o_settings_container" name="qualid_files">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                            <span class="o_form_label">Images, videos and documents</span>
+                            <div class="text-muted">PDFs, attachments and images sent from Odoo are uploaded securely to Quali-D so WhatsApp can deliver them.</div>
                             <div class="o_qualid_retention">
                                 <i class="fa fa-comments-o me-1"/>Kept with the conversation, so your team can open them later in the Quali-D inbox.
                             </div>
@@ -114,8 +127,9 @@
                                 Not counted toward your Quali-D broadcast media storage.
                                 Limits: images 5 MB (converted to JPEG), videos 16 MB (MP4/3GP), documents 100 MB.
                             </div>
-                        </setting>
-                    </block>
+                        </div>
+                        </div>
+                    </div>
 
                     <!-- ── Ready-made automations ── -->
                     <div class="o_qualid_guide">
@@ -143,8 +157,8 @@
                                     <span>When a customer invoice is confirmed · invoice PDF attached</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'invoice_posted'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_account"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_account">Install Invoicing</span>
+                                        context="{'default_preset': 'invoice_posted'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_account', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_account', '!=', False)]}">Install Invoicing</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-check-circle-o" title="Automation"/>
@@ -153,8 +167,8 @@
                                     <span>When a customer invoice becomes paid</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'invoice_paid'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_account"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_account">Install Invoicing</span>
+                                        context="{'default_preset': 'invoice_paid'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_account', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_account', '!=', False)]}">Install Invoicing</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-bell-o" title="Automation"/>
@@ -163,8 +177,8 @@
                                     <span>2 days before an unpaid invoice is due</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'invoice_due_soon'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_account"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_account">Install Invoicing</span>
+                                        context="{'default_preset': 'invoice_due_soon'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_account', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_account', '!=', False)]}">Install Invoicing</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-exclamation-circle" title="Automation"/>
@@ -173,8 +187,8 @@
                                     <span>3 days after the due date if still unpaid</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'invoice_overdue'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_account"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_account">Install Invoicing</span>
+                                        context="{'default_preset': 'invoice_overdue'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_account', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_account', '!=', False)]}">Install Invoicing</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-paper-plane-o" title="Automation"/>
@@ -183,8 +197,8 @@
                                     <span>When a quotation is marked as sent · PDF attached</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'quotation_sent'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_sale"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_sale">Install Sales</span>
+                                        context="{'default_preset': 'quotation_sent'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_sale', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_sale', '!=', False)]}">Install Sales</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-shopping-cart" title="Automation"/>
@@ -193,8 +207,8 @@
                                     <span>When a quotation is confirmed · PDF attached</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'order_confirmed'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_sale"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_sale">Install Sales</span>
+                                        context="{'default_preset': 'order_confirmed'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_sale', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_sale', '!=', False)]}">Install Sales</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-truck" title="Automation"/>
@@ -203,8 +217,8 @@
                                     <span>When a customer delivery is validated · PDF attached</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'delivery_done'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_stock"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_stock">Install Inventory</span>
+                                        context="{'default_preset': 'delivery_done'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_stock', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_stock', '!=', False)]}">Install Inventory</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-bolt" title="Automation"/>
@@ -213,8 +227,8 @@
                                     <span>When a lead with a phone number is created</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'lead_new'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_crm"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_crm">Install CRM</span>
+                                        context="{'default_preset': 'lead_new'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_crm', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_crm', '!=', False)]}">Install CRM</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-trophy" title="Automation"/>
@@ -223,8 +237,8 @@
                                     <span>When an opportunity reaches a Won stage</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'lead_won'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_crm"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_crm">Install CRM</span>
+                                        context="{'default_preset': 'lead_won'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_crm', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_crm', '!=', False)]}">Install CRM</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-user-plus" title="Automation"/>
@@ -242,8 +256,8 @@
                                     <span>When a purchase order is confirmed · PDF attached</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'po_confirmed'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_purchase"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_purchase">Install Purchase</span>
+                                        context="{'default_preset': 'po_confirmed'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_purchase', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_purchase', '!=', False)]}">Install Purchase</span>
                             </div>
                             <div class="o_qualid_preset">
                                 <i class="fa fa-tasks" title="Automation"/>
@@ -252,8 +266,8 @@
                                     <span>When a task with a customer is marked as done</span>
                                 </div>
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action" string="Set up"
-                                        context="{'default_preset': 'task_done'}" class="btn btn-secondary btn-sm" invisible="not qualid_app_project"/>
-                                <span class="o_qualid_needs" invisible="qualid_app_project">Install Project</span>
+                                        context="{'default_preset': 'task_done'}" class="btn btn-secondary btn-sm" attrs="{'invisible': [('qualid_app_project', '=', False)]}"/>
+                                <span class="o_qualid_needs" attrs="{'invisible': [('qualid_app_project', '!=', False)]}">Install Project</span>
                             </div>
                         </div>
 
@@ -283,12 +297,12 @@
                                 <div class="o_qualid_tip">
                                     <b><i class="fa fa-pencil me-1"/>Changing an automation</b>
                                     My Automations → open the rule. Use <b>Apply on</b> to limit which records count
-                                    (e.g. add <i>Type is Customer Invoice</i>), open the WhatsApp action to change the template,
-                                    variables or file, or untick <b>Active</b> to pause it.
+                                    (e.g. add <i>Type is Customer Invoice</i>), change the template,
+                                    variables or file right below it, or untick <b>Active</b> to pause it.
                                 </div>
                                 <div class="o_qualid_tip">
                                     <b><i class="fa fa-wrench me-1"/>Build your own</b>
-                                    My Automations → New → choose any model and trigger → Add an action →
+                                    My Automations → New → choose any model and trigger → set <b>Action To Do</b> to
                                     <b>Send WhatsApp (Quali-D)</b>. Works with any app, including custom ones.
                                 </div>
                                 <div class="o_qualid_tip">
@@ -303,7 +317,7 @@
                     <div class="o_qualid_footer">
                         Need help? <a href="https://quali-d.com" target="_blank">quali-d.com</a>
                     </div>
-                </app>
+                </div>
             </xpath>
         </field>
     </record>

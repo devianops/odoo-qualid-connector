@@ -40,16 +40,6 @@ class IrActionsServer(models.Model):
             action.qualid_template_needs_media = bool(tpl) and tpl._qualid_has_media_header()
             action.qualid_template_header_type = (tpl.header_format or '').lower() if action.qualid_template_needs_media else False
 
-    # base_automation hides `name` and computes it from the type — give ours a readable name.
-    @api.depends('qualid_template_id')
-    def _compute_name(self):
-        super()._compute_name()
-        for action in self.filtered(lambda a: a.state == 'qualid_template'):
-            if action.qualid_template_id:
-                action.name = _('Send WhatsApp: %s', action.qualid_template_id.display_name)
-            else:
-                action.name = _('Send WhatsApp')
-
     @api.onchange('qualid_template_id')
     def _onchange_qualid_template_id(self):
         if self.state != 'qualid_template':

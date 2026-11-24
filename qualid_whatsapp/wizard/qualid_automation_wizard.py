@@ -192,11 +192,6 @@ class QualidAutomationWizard(models.TransientModel):
             self.qualid_media_report_id = False
 
     # ------------------------------------------------------------------
-    def _qualid_selection_value(self, model, field_name, value):
-        field = self.env['ir.model.fields']._get(model, field_name)
-        return self.env['ir.model.fields.selection'].search(
-            [('field_id', '=', field.id), ('value', '=', value)], limit=1)
-
     def action_create(self):
         self.ensure_one()
         p = PRESETS.get(self.preset)
@@ -213,53 +208,48 @@ class QualidAutomationWizard(models.TransientModel):
 
         model = self.env['ir.model']._get(p['model'])
         Fields = self.env['ir.model.fields']
+        spec = self._qualid_media_spec(self.template_id)
+        src = spec.get('media_source')
+        # Odoo 16: an automated action *is* a server action (delegation), so rule + action are one record.
         vals = {
             'name': _('WhatsApp: %s', p['name']),
             'model_id': model.id,
-            'trigger': p['trigger'],
             'active': self.active,
-        }
-        if p.get('trigger_fields'):
-            vals['trigger_field_ids'] = [Command.set([Fields._get(p['model'], f).id for f in p['trigger_fields']])]
-        if p['trigger'] == 'on_state_set':
-            # Set explicitly: Odoo only fills these from the trigger in its own form, not on create().
-            vals['trigger_field_ids'] = [Command.set([Fields._get(p['model'], 'state').id])]
-            vals['trg_selection_field_id'] = self._qualid_selection_value(p['model'], 'state', p['state_value']).id
-        if p['trigger'] == 'on_time':
-            vals.update({
-                'trg_date_id': Fields._get(p['model'], p['date_field']).id,
-                'trg_date_range': p['delay'],
-                'trg_date_range_type': 'day',
-            })
-        rule = self.env['base.automation'].create(vals)
-        # Written after create: Odoo recomputes these from the trigger, we add our extra conditions.
-        rule.write({
-            'filter_domain': repr(p.get('domain') or []),
-            'filter_pre_domain': repr(p['pre_domain']) if p.get('pre_domain') else False,
-        })
-
-        spec = self._qualid_media_spec(self.template_id)
-        self.env['ir.actions.server'].create({
-            'name': _('Send WhatsApp: %s', self.template_id.display_name),
-            'model_id': model.id,
             'usage': 'base_automation',
-            'base_automation_id': rule.id,
             'state': 'qualid_template',
             'qualid_template_id': self.template_id.id,
             'qualid_phone_path': self.phone_path or False,
             'qualid_send_mode': self.send_mode,
             'qualid_once_per_record': True,
-            'qualid_media_source': spec.get('media_source') or False,
-            'qualid_media_report_id': self.qualid_media_report_id.id if spec.get('media_source') == 'report' else False,
-            'qualid_media_image_field_id': self.qualid_media_image_field_id.id if spec.get('media_source') == 'image_field' else False,
-            'qualid_media_url_field_id': self.qualid_media_url_field_id.id if spec.get('media_source') == 'url_field' else False,
-            'qualid_media_attachment_filter': self.qualid_media_attachment_filter if spec.get('media_source') == 'attachment' else False,
-            'qualid_media_url': self.qualid_media_url if spec.get('media_source') == 'url' else False,
+            'qualid_media_source': src or False,
+            'qualid_media_report_id': self.qualid_media_report_id.id if src == 'report' else False,
+            'qualid_media_image_field_id': self.qualid_media_image_field_id.id if src == 'image_field' else False,
+            'qualid_media_url_field_id': self.qualid_media_url_field_id.id if src == 'url_field' else False,
+            'qualid_media_attachment_filter': self.qualid_media_attachment_filter if src == 'attachment' else False,
+            'qualid_media_url': self.qualid_media_url if src == 'url' else False,
             'qualid_param_ids': [Command.create({
                 'sequence': l.sequence, 'component': l.component, 'placeholder': l.placeholder,
                 'source': l.source, 'field_path': l.field_path, 'text': l.text,
             }) for l in self.line_ids],
-        })
+            'filter_domain': repr(p.get('domain') or []),
+            'filter_pre_domain': repr(p['pre_domain']) if p.get('pre_domain') else False,
+        }
+        trigger = p['trigger']
+        if trigger == 'on_state_set':
+            # Odoo 16 has no "State is set to": watch the state field, and only fire on the change into the value.
+            trigger = 'on_create_or_write'
+            vals['trigger_field_ids'] = [Command.set([Fields._get(p['model'], 'state').id])]
+            vals['filter_pre_domain'] = repr([('state', '!=', p['state_value'])])
+        elif p.get('trigger_fields'):
+            vals['trigger_field_ids'] = [Command.set([Fields._get(p['model'], f).id for f in p['trigger_fields']])]
+        if trigger == 'on_time':
+            vals.update({
+                'trg_date_id': Fields._get(p['model'], p['date_field']).id,
+                'trg_date_range': p['delay'],
+                'trg_date_range_type': 'day',
+            })
+        vals['trigger'] = trigger
+        rule = self.env['base.automation'].create(vals)
 
         return {
             'type': 'ir.actions.act_window',

@@ -12,13 +12,13 @@
         <field name="arch" type="xml">
             <!-- After the whole two-column wrapper, so our block uses the full width -->
             <xpath expr="//group[@name='action_wrapper']" position="after">
-                <div invisible="state != 'qualid_template'" class="o_qualid_action mt-2">
+                <div class="o_qualid_action mt-2" attrs="{'invisible': [('state', '!=', 'qualid_template')]}">
                     <field name="qualid_template_needs_media" invisible="1"/>
                     <group>
                         <group>
                             <field name="qualid_template_id"
-                                   required="state == 'qualid_template'"
-                                   options="{'no_create': True, 'no_open': True}"/>
+                                  
+                                   options="{'no_create': True, 'no_open': True}" attrs="{'required': [('state', '=', 'qualid_template')]}"/>
                             <field name="qualid_phone_path" placeholder="Automatic"/>
                         </group>
                         <group>
@@ -27,34 +27,34 @@
                         </group>
                     </group>
                     <!-- ── Header file (image / video / document templates) ── -->
-                    <div invisible="not qualid_template_needs_media" class="o_qualid_media_box mt-3">
+                    <div class="o_qualid_media_box mt-3" attrs="{'invisible': [('qualid_template_needs_media', '=', False)]}">
                         <div class="o_qualid_media_title">
                             <i class="fa fa-paperclip me-1"/> Header file — this template needs a
                             <b><field name="qualid_template_header_type" readonly="1" class="o_qualid_inline"/></b>
                         </div>
                         <group>
                             <field name="qualid_media_source" widget="radio" string="Take the file from"
-                                   options="{'horizontal': true}"
-                                   required="state == 'qualid_template' and qualid_template_needs_media"/>
+                                   options="{'horizontal': true}" attrs="{'required': [('state', '=', 'qualid_template'), ('qualid_template_needs_media', '!=', False)]}"
+                                  />
                             <field name="qualid_media_report_id" string="PDF report"
-                                   invisible="qualid_media_source != 'report'" required="state == 'qualid_template' and qualid_template_needs_media and qualid_media_source == 'report'"
+                                  
                                    domain="[('model', '=', model_name), ('report_type', '=', 'qweb-pdf')]"
                                    options="{'no_create': True, 'no_open': True}"
-                                   placeholder="e.g. Invoices, Quotation / Order"/>
+                                   placeholder="e.g. Invoices, Quotation / Order" attrs="{'invisible': [('qualid_media_source', '!=', 'report')], 'required': [('state', '=', 'qualid_template'), ('qualid_template_needs_media', '!=', False), ('qualid_media_source', '=', 'report')]}"/>
                             <field name="qualid_media_attachment_filter"
-                                   invisible="qualid_media_source != 'attachment'"
-                                   placeholder="optional — e.g. result, contract"/>
+                                  
+                                   placeholder="optional — e.g. result, contract" attrs="{'invisible': [('qualid_media_source', '!=', 'attachment')]}"/>
                             <field name="qualid_media_image_field_id" string="Image field"
-                                   invisible="qualid_media_source != 'image_field'" required="state == 'qualid_template' and qualid_template_needs_media and qualid_media_source == 'image_field'"
+                                  
                                    domain="[('model', '=', model_name), ('ttype', '=', 'binary')]"
-                                   options="{'no_create': True, 'no_open': True}"/>
+                                   options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('qualid_media_source', '!=', 'image_field')], 'required': [('state', '=', 'qualid_template'), ('qualid_template_needs_media', '!=', False), ('qualid_media_source', '=', 'image_field')]}"/>
                             <field name="qualid_media_url_field_id" string="Field with the link"
-                                   invisible="qualid_media_source != 'url_field'" required="state == 'qualid_template' and qualid_template_needs_media and qualid_media_source == 'url_field'"
+                                  
                                    domain="[('model', '=', model_name), ('ttype', 'in', ('char', 'text'))]"
-                                   options="{'no_create': True, 'no_open': True}"/>
+                                   options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('qualid_media_source', '!=', 'url_field')], 'required': [('state', '=', 'qualid_template'), ('qualid_template_needs_media', '!=', False), ('qualid_media_source', '=', 'url_field')]}"/>
                             <field name="qualid_media_url" string="File link"
-                                   invisible="qualid_media_source != 'url'" required="state == 'qualid_template' and qualid_template_needs_media and qualid_media_source == 'url'"
-                                   placeholder="https://…"/>
+                                  
+                                   placeholder="https://…" attrs="{'invisible': [('qualid_media_source', '!=', 'url')], 'required': [('state', '=', 'qualid_template'), ('qualid_template_needs_media', '!=', False), ('qualid_media_source', '=', 'url')]}"/>
                         </group>
                         <div class="text-muted small">
                             <i class="fa fa-lock me-1"/>Files generated in Odoo (PDFs, attachments, images) are uploaded
@@ -62,19 +62,19 @@
                             Images are converted to JPEG automatically. Limits: images 5 MB, videos 16 MB (MP4), documents 100 MB.
                         </div>
                     </div>
-                    <field name="qualid_param_ids" nolabel="1" invisible="not qualid_template_id">
+                    <field name="qualid_param_ids" nolabel="1" attrs="{'invisible': [('qualid_template_id', '=', False)]}">
                         <tree editable="bottom" create="false" delete="false">
-                            <field name="sequence" column_invisible="True"/>
+                            <field name="sequence" invisible="1"/>
                             <field name="component" readonly="1" force_save="1"/>
                             <field name="placeholder" readonly="1" force_save="1" string="Variable"/>
                             <field name="source"/>
-                            <field name="field_path" invisible="source != 'field'"
-                                   required="source == 'field'" placeholder="e.g. partner_id.name"/>
-                            <field name="text" invisible="source != 'text'"
-                                   required="source == 'text'" placeholder="Fixed text"/>
+                            <field name="field_path"
+                                   placeholder="e.g. partner_id.name" attrs="{'invisible': [('source', '!=', 'field')], 'required': [('source', '=', 'field')]}"/>
+                            <field name="text"
+                                   placeholder="Fixed text" attrs="{'invisible': [('source', '!=', 'text')], 'required': [('source', '=', 'text')]}"/>
                         </tree>
                     </field>
-                    <div class="text-muted small" invisible="not qualid_template_id">
+                    <div class="text-muted small" attrs="{'invisible': [('qualid_template_id', '=', False)]}">
                         Use technical field names; follow relations with dots (partner_id.name, user_id.name, amount_total).
                         Manage templates under <b>Quali-D WhatsApp → Templates</b>.
                     </div>

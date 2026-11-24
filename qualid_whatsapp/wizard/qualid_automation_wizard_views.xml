@@ -11,60 +11,60 @@
 
                 <group>
                     <field name="preset" widget="selection" placeholder="Choose what should trigger the message…"/>
-                    <field name="preset_when" readonly="1" invisible="not preset"/>
-                    <field name="template_id" options="{'no_create': True, 'no_open': True}" invisible="not preset"/>
+                    <field name="preset_when" readonly="1" attrs="{'invisible': [('preset', '=', False)]}"/>
+                    <field name="template_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('preset', '=', False)]}"/>
                 </group>
 
-                <div class="text-muted small mb-2" invisible="not preset or template_id or not preset_has_report">
+                <div class="text-muted small mb-2" attrs="{'invisible': ['|', '|', ('preset', '=', False), ('template_id', '!=', False), ('preset_has_report', '=', False)]}">
                     <i class="fa fa-lightbulb-o me-1"/>Tip: pick a template with a <b>Document</b> header to attach the PDF automatically.
                 </div>
 
                 <!-- ── Header file (image / video / document templates) ── -->
-                <div invisible="not needs_media" class="o_qualid_media_box mt-2 mb-3">
+                <div class="o_qualid_media_box mt-2 mb-3" attrs="{'invisible': [('needs_media', '=', False)]}">
                     <div class="o_qualid_media_title">
                         <i class="fa fa-paperclip me-1"/> Header file — this template needs a
                         <b><field name="header_type" readonly="1" class="o_qualid_inline"/></b>
                     </div>
                     <group>
                         <field name="qualid_media_source" widget="radio" string="Take the file from"
-                               options="{'horizontal': true}" required="needs_media"/>
+                               options="{'horizontal': true}" attrs="{'required': [('needs_media', '!=', False)]}"/>
                         <field name="qualid_media_report_id" string="PDF report"
-                               invisible="qualid_media_source != 'report'" required="needs_media and qualid_media_source == 'report'"
+                              
                                domain="[('model', '=', model_name), ('report_type', '=', 'qweb-pdf')]"
-                               options="{'no_create': True, 'no_open': True}"/>
+                               options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('qualid_media_source', '!=', 'report')], 'required': [('needs_media', '!=', False), ('qualid_media_source', '=', 'report')]}"/>
                         <field name="qualid_media_attachment_filter"
-                               invisible="qualid_media_source != 'attachment'"
-                               placeholder="optional — e.g. result, contract"/>
+                              
+                               placeholder="optional — e.g. result, contract" attrs="{'invisible': [('qualid_media_source', '!=', 'attachment')]}"/>
                         <field name="qualid_media_image_field_id" string="Image field"
-                               invisible="qualid_media_source != 'image_field'" required="needs_media and qualid_media_source == 'image_field'"
+                              
                                domain="[('model', '=', model_name), ('ttype', '=', 'binary')]"
-                               options="{'no_create': True, 'no_open': True}"/>
+                               options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('qualid_media_source', '!=', 'image_field')], 'required': [('needs_media', '!=', False), ('qualid_media_source', '=', 'image_field')]}"/>
                         <field name="qualid_media_url_field_id" string="Field with the link"
-                               invisible="qualid_media_source != 'url_field'" required="needs_media and qualid_media_source == 'url_field'"
+                              
                                domain="[('model', '=', model_name), ('ttype', 'in', ('char', 'text'))]"
-                               options="{'no_create': True, 'no_open': True}"/>
+                               options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('qualid_media_source', '!=', 'url_field')], 'required': [('needs_media', '!=', False), ('qualid_media_source', '=', 'url_field')]}"/>
                         <field name="qualid_media_url" string="File link"
-                               invisible="qualid_media_source != 'url'" required="needs_media and qualid_media_source == 'url'"
-                               placeholder="https://…"/>
+                              
+                               placeholder="https://…" attrs="{'invisible': [('qualid_media_source', '!=', 'url')], 'required': [('needs_media', '!=', False), ('qualid_media_source', '=', 'url')]}"/>
                     </group>
                 </div>
 
-                <div invisible="not template_id">
+                <div attrs="{'invisible': [('template_id', '=', False)]}">
                     <div class="fw-bold mb-1">Template variables</div>
                     <div class="text-muted small mb-1">Suggested fields are filled in — change any of them if needed.</div>
                     <field name="line_ids" nolabel="1">
                         <tree editable="bottom" create="false" delete="false">
-                            <field name="sequence" column_invisible="True"/>
+                            <field name="sequence" invisible="1"/>
                             <field name="component" readonly="1" force_save="1"/>
                             <field name="placeholder" readonly="1" force_save="1" string="Variable"/>
                             <field name="source"/>
-                            <field name="field_path" invisible="source != 'field'" placeholder="e.g. partner_id.name"/>
-                            <field name="text" invisible="source != 'text'" placeholder="Fixed text"/>
+                            <field name="field_path" placeholder="e.g. partner_id.name" attrs="{'invisible': [('source', '!=', 'field')]}"/>
+                            <field name="text" placeholder="Fixed text" attrs="{'invisible': [('source', '!=', 'text')]}"/>
                         </tree>
                     </field>
                 </div>
 
-                <group invisible="not template_id">
+                <group attrs="{'invisible': [('template_id', '=', False)]}">
                     <group>
                         <field name="phone_path" placeholder="Automatic"/>
                         <field name="active"/>
