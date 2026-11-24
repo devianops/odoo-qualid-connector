@@ -2,6 +2,8 @@
 
 Send approved WhatsApp Business templates from Odoo through [Quali-D](https://quali-d.com).
 
+A Quali-D account is required. Sign up at [quali-d.com/whatsappconnect](https://quali-d.com/whatsappconnect).
+
 | Odoo edition | How to connect |
 |---|---|
 | Self-hosted / Odoo.sh | Install the `qualid_whatsapp` module (this repo) |
