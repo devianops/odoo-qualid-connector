@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'WhatsApp Integration for Odoo - Templates, Invoices & Automations | Quali-D',
-    'version': '18.0.1.1.3',
+    'version': '18.0.1.1.4',
     'summary': 'WhatsApp Business API for Odoo Community & Enterprise: send approved templates, invoice PDFs, payment reminders and order updates on WhatsApp automatically. No Meta developer setup.',
     'author': 'Quali-D',
     'website': 'https://quali-d.com',
