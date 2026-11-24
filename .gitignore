@@ -9,3 +9,7 @@ venv/
 *.log
 .DS_Store
 Thumbs.db
+
+# Source artwork and raw screenshots (processed copies live in qualid_whatsapp/static/description/img)
+/Screenshots/
+/*.png
