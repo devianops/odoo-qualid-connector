@@ -186,7 +186,15 @@ $qualid-wa: #25d366;
     border-radius: 14px;
     border: 1px solid rgba($qualid-blue, 0.22);
 
-    h3 { margin: 0 0 4px; font-size: 18px; }
+    // Not an <h3>: Odoo's settings CSS forces every h3 in a settings block down to 13px body text.
+    // Same size and weight as the page's section titles (Connection, WhatsApp Templates…).
+    .o_qualid_guide_title {
+        margin: 0 0 6px;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.2;
+        color: var(--o-color-gray-900, #212529);
+    }
 
     .o_qualid_guide_head {
         display: flex;

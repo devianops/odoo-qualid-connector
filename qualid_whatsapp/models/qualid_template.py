@@ -46,6 +46,11 @@ class QualidWhatsappTemplate(models.Model):
         except ValueError:
             return []
 
+    def _qualid_has_variables(self):
+        """True when the template has at least one {{n}} to fill (header or body)."""
+        self.ensure_one()
+        return bool(self.header_has_variable or self._qualid_body_variable_names())
+
     def _qualid_has_media_header(self):
         self.ensure_one()
         return (self.header_format or '').upper() in ('IMAGE', 'VIDEO', 'DOCUMENT')
