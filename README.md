@@ -1,8 +1,14 @@
 # Quali-D WhatsApp — Odoo Connector
 
+![WhatsApp Integration for Odoo by Quali-D](docs/banner.jpg)
+
 Send approved WhatsApp Business templates from Odoo through [Quali-D](https://quali-d.com).
 
 A Quali-D account is required. Sign up at [quali-d.com/whatsappconnect](https://quali-d.com/whatsappconnect).
+
+Get it from the [Odoo Apps store](https://apps.odoo.com/apps/modules/19.0/qualid_whatsapp) · Read the [setup guide](https://quali-d.com/blog/odoo-whatsapp-integration)
+
+![How it works: invoice confirmed in Odoo, automation rule runs, customer receives it on WhatsApp](qualid_whatsapp/static/description/img/how_it_works.png)
 
 | Odoo edition | How to connect |
 |---|---|
@@ -10,6 +16,8 @@ A Quali-D account is required. Sign up at [quali-d.com/whatsappconnect](https://
 | Odoo Online (SaaS, v17+) | No install needed. Use Odoo's built-in **Send Webhook Notification** action with the URL generated in Quali-D → Settings → Odoo Connector |
 
 ## Features
+
+![Ready-made WhatsApp automations in Odoo settings](qualid_whatsapp/static/description/img/presets.png)
 
 - **Ready-made automations**: one click sets up a complete rule. There are 12 recipes: invoice confirmed or paid, payment and overdue reminders, quotation sent, order confirmed, delivery done, new lead, opportunity won, new contact, purchase order, and task done.
 - **Automation Rules**: a new server action type, *Send WhatsApp (Quali-D)*, that works with any model and any trigger.
@@ -20,12 +28,20 @@ A Quali-D account is required. Sign up at [quali-d.com/whatsappconnect](https://
 - **Manual send wizard**: on Contacts, for one record or in bulk. For any other model, use *Create Contextual Action* on a server action.
 - **Logging**: a chatter note on the record and a full message log.
 
+![Choosing the invoice PDF as the WhatsApp header file](qualid_whatsapp/static/description/img/wizard.png)
+
+![WhatsApp message log in Odoo](qualid_whatsapp/static/description/img/messages.png)
+
 ## Installation (self-hosted / Odoo.sh)
+
+Download the version that matches your Odoo from the [Odoo Apps store](https://apps.odoo.com/apps/modules/19.0/qualid_whatsapp), or use this repo:
 
 1. Copy `qualid_whatsapp/` into your addons path. On Odoo.sh, add this repo as a submodule.
 2. Restart Odoo, update the Apps list and install **Quali-D WhatsApp**.
 3. In Quali-D, open **Settings → Odoo Connector** and click **New Token**. Copy the token; it is shown only once.
-4. In Odoo, open **Settings → Quali-D WhatsApp**, paste the token and save. Templates are imported automatically, and re-synced every hour.
+4. In Odoo, open **Settings → Quali-D WhatsApp**, paste the token and click **Connect**. Templates are imported automatically, and re-synced every hour.
+
+![Quali-D WhatsApp settings in Odoo](qualid_whatsapp/static/description/img/settings.png)
 
 Recommended: add your Odoo server's public IP to the token's **Allowed IPs** in Quali-D.
 
@@ -55,7 +71,8 @@ Open **My Automations** and click the rule.
 
 1. In Quali-D, open **Settings → Odoo Connector → Webhook**. Pick a template and map each variable to a field name.
 2. Copy the generated URL.
-3. In Odoo, create an Automation Rule with the action **Send Webhook Notification**. Paste the URL and, under *Fields*, select the phone field and every field used as a variable.
+3. In Odoo, create a server action of type **Send Webhook Notification** (or an Automation Rule with that action, if your plan includes them). Paste the URL and, under *Fields*, select the phone field and every field used as a variable. Run it from the record's **⚙ Actions** menu, or let the rule trigger it.
+4. Header files can be a fixed link, a link stored in a field, or an image/file stored on the record (tick that field too).
 
 > The webhook URL contains the token. If it leaks, rotate the token in Quali-D and the old URL stops working immediately.
 
@@ -86,6 +103,8 @@ Other endpoints:
 Error responses carry an `error_code`. Common values are `ODOO_TOKEN_INVALID`, `ODOO_TOKEN_REVOKED`, `ODOO_IP_NOT_ALLOWED`, `ODOO_RATE_LIMITED`, `ODOO_INVALID_PHONE`, `PLAN_NOT_ELIGIBLE` and `INSUFFICIENT_CREDIT`.
 
 ## Version branches
+
+![Works with Odoo 16, 17, 18, 19 and 20](qualid_whatsapp/static/description/img/versions.png)
 
 Use the branch that matches your Odoo version. All five pass the same test suite: install, settings page, ready-made automations, rules firing (including PDF headers), empty-variable protection and the send wizard.
 
