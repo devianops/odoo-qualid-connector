@@ -6,7 +6,6 @@ manual send wizard. Files that only exist inside Odoo (reports, attachments,
 image fields) are uploaded to Quali-D, which returns a public link WhatsApp can
 download. Quali-D keeps them with the conversation history.
 """
-import base64
 import io
 import logging
 import re
@@ -228,7 +227,8 @@ class QualidMediaResolver(models.AbstractModel):
             raise QualidMediaError('MEDIA_NO_ATTACHMENT', _(
                 'No %(type)s attachment%(flt)s found on this record.',
                 type=expected, flt=(_(' named like "%s"', name_filter) if name_filter else '')))
-        content = att.raw or b''
+        # Odoo 20: binary fields hold a BinaryValue (raw bytes proxy), not bytes/base64
+        content = bytes(att.raw) if att.raw else b''
         if not content:
             raise QualidMediaError('MEDIA_EMPTY', _('The attachment "%s" is empty.', att.name))
         mimetype = att.mimetype or guess_mimetype(content)
@@ -242,7 +242,7 @@ class QualidMediaResolver(models.AbstractModel):
         if not value:
             raise QualidMediaError('MEDIA_NO_IMAGE', _('This record has no image in "%s".',
                                                        record._fields[field_name].string))
-        content = base64.b64decode(value)
+        content = bytes(value)  # Odoo 20: BinaryValue of the raw image bytes (no longer base64)
         return content, '%s_%s' % (record._name.replace('.', '_'), record.id), guess_mimetype(content)
 
     @api.model

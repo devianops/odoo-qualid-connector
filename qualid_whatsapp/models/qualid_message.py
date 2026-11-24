@@ -158,7 +158,7 @@ class QualidWhatsappMessage(models.Model):
     # ------------------------------------------------------------------
     def _qualid_payload(self):
         self.ensure_one()
-        db_uuid = self.env['ir.config_parameter'].sudo().get_param('database.uuid', '')
+        db_uuid = self.env['ir.config_parameter'].sudo().get_str('database.uuid', '')
         payload = {
             'to': self.phone,
             'template': self.template_name,

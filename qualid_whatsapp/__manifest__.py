@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Quali-D WhatsApp',
-    'version': '19.0.1.1.2',
+    'version': '20.0.1.1.2',
     'summary': 'Send approved WhatsApp templates from Odoo automation rules, server actions and records via Quali-D',
     'author': 'Quali-D',
     'website': 'https://quali-d.com',
@@ -11,7 +11,7 @@
     'depends': ['base', 'mail', 'base_automation'],
     'external_dependencies': {'python': ['requests']},
     'data': [
-        'security/ir.model.access.csv',
+        'security/ir.access.csv',
         'data/ir_cron.xml',
         'views/qualid_template_views.xml',
         'views/qualid_message_views.xml',

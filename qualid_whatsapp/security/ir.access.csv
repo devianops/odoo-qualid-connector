@@ -1,0 +1,11 @@
+id,name,model_id,group_id/id,operation,domain
+access_qualid_template_user,qualid.whatsapp.template user,qualid.whatsapp.template,base.group_user,r,
+access_qualid_template_system,qualid.whatsapp.template system,qualid.whatsapp.template,base.group_system,crud,
+access_qualid_action_param_user,qualid.action.param user,qualid.action.param,base.group_user,r,
+access_qualid_action_param_system,qualid.action.param system,qualid.action.param,base.group_system,crud,
+access_qualid_message_user,qualid.whatsapp.message user,qualid.whatsapp.message,base.group_user,r,
+access_qualid_message_system,qualid.whatsapp.message system,qualid.whatsapp.message,base.group_system,crud,
+access_qualid_send_wizard_user,qualid.send.wizard user,qualid.send.wizard,base.group_user,crud,
+access_qualid_send_wizard_line_user,qualid.send.wizard.line user,qualid.send.wizard.line,base.group_user,crud,
+access_qualid_automation_wizard_system,qualid.automation.wizard system,qualid.automation.wizard,base.group_system,crud,
+access_qualid_automation_wizard_line_system,qualid.automation.wizard.line system,qualid.automation.wizard.line,base.group_system,crud,

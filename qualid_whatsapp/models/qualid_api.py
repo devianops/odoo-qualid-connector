@@ -32,8 +32,8 @@ class QualidApi(models.AbstractModel):
     @api.model
     def _qualid_get_config(self):
         icp = self.env['ir.config_parameter'].sudo()
-        url = (icp.get_param(PARAM_URL) or DEFAULT_API_URL).strip().rstrip('/')
-        token = (icp.get_param(PARAM_TOKEN) or '').strip()
+        url = (icp.get_str(PARAM_URL) or DEFAULT_API_URL).strip().rstrip('/')
+        token = (icp.get_str(PARAM_TOKEN) or '').strip()
         return url, token
 
     @api.model

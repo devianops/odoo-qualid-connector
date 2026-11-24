@@ -36,8 +36,8 @@ class ResConfigSettings(models.TransientModel):
     @api.depends('company_id')
     def _compute_qualid_status(self):
         icp = self.env['ir.config_parameter'].sudo()
-        token = (icp.get_param(PARAM_TOKEN) or '').strip()
-        email = (icp.get_param(PARAM_ACCOUNT_EMAIL) or '').strip()
+        token = (icp.get_str(PARAM_TOKEN) or '').strip()
+        email = (icp.get_str(PARAM_ACCOUNT_EMAIL) or '').strip()
         Template = self.env['qualid.whatsapp.template']
         count = Template.search_count([])
         last = Template.search([('last_sync', '!=', False)], order='last_sync desc', limit=1).last_sync
@@ -51,21 +51,21 @@ class ResConfigSettings(models.TransientModel):
         """Call /odoo/verify and remember the account email (cleared on failure)."""
         _status, data = self.env['qualid.api']._qualid_request('GET', '/odoo/verify', raise_on_error=False)
         icp = self.env['ir.config_parameter'].sudo()
-        icp.set_param(PARAM_ACCOUNT_EMAIL, (data.get('account_email') or '') if data.get('success') else '')
+        icp.set_str(PARAM_ACCOUNT_EMAIL, (data.get('account_email') or '') if data.get('success') else '')
         return data
 
     def set_values(self):
         icp = self.env['ir.config_parameter'].sudo()
-        old_token = (icp.get_param(PARAM_TOKEN) or '').strip()
+        old_token = (icp.get_str(PARAM_TOKEN) or '').strip()
         super().set_values()
-        new_token = (icp.get_param(PARAM_TOKEN) or '').strip()
+        new_token = (icp.get_str(PARAM_TOKEN) or '').strip()
         if new_token != old_token:
             if new_token:
                 # New or changed token → verify and pull templates right away (never blocks saving)
                 self._qualid_verify()
                 self.env['qualid.whatsapp.template']._qualid_sync_safe()
             else:
-                icp.set_param(PARAM_ACCOUNT_EMAIL, '')
+                icp.set_str(PARAM_ACCOUNT_EMAIL, '')
 
     def _qualid_notify(self, message, ntype='success', reload=False):
         params = {'title': _('Quali-D'), 'message': message, 'type': ntype, 'sticky': ntype == 'danger'}
@@ -78,7 +78,7 @@ class ResConfigSettings(models.TransientModel):
         """Used by both "Connect" (not connected yet) and "Test Connection"."""
         self.ensure_one()
         icp = self.env['ir.config_parameter'].sudo()
-        was_connected = bool((icp.get_param(PARAM_TOKEN) or '').strip() and (icp.get_param(PARAM_ACCOUNT_EMAIL) or '').strip())
+        was_connected = bool((icp.get_str(PARAM_TOKEN) or '').strip() and (icp.get_str(PARAM_ACCOUNT_EMAIL) or '').strip())
         self.set_values()  # persist what was just typed (a new token is verified + templates synced here)
         data = self._qualid_verify()
         if data.get('success'):
@@ -95,8 +95,8 @@ class ResConfigSettings(models.TransientModel):
         """Delete the saved token (and account) from this database. Templates and automations are kept."""
         self.ensure_one()
         icp = self.env['ir.config_parameter'].sudo()
-        icp.set_param(PARAM_TOKEN, False)          # False removes the parameter row
-        icp.set_param(PARAM_ACCOUNT_EMAIL, False)
+        # Odoo 20: set_str(key, False) keeps an empty row, so delete the rows outright
+        icp.search([('key', 'in', [PARAM_TOKEN, PARAM_ACCOUNT_EMAIL])]).unlink()
         return self._qualid_notify(_('Disconnected from Quali-D. The token was deleted from this database.'),
                                    'info', reload=True)
 
