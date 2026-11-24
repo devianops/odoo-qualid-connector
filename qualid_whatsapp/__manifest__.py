@@ -4,7 +4,7 @@
     'version': '19.0.1.1.4',
     'summary': 'WhatsApp Business API for Odoo Community & Enterprise: send approved templates, invoice PDFs, payment reminders and order updates on WhatsApp automatically. No Meta developer setup.',
     'author': 'Quali-D',
-    'website': 'https://quali-d.com',
+    'website': 'https://quali-d.com/whatsappconnect',
     'support': 'support@quali-d.com',
     'category': 'Marketing/WhatsApp',
     'license': 'LGPL-3',
