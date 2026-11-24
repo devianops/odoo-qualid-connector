@@ -14,6 +14,7 @@
             <xpath expr="//group[@name='action_wrapper']" position="after">
                 <div class="o_qualid_action mt-2" attrs="{'invisible': [('state', '!=', 'qualid_template')]}">
                     <field name="qualid_template_needs_media" invisible="1"/>
+                    <field name="qualid_template_has_variables" invisible="1"/>
                     <group>
                         <group>
                             <field name="qualid_template_id"
@@ -62,7 +63,7 @@
                             Images are converted to JPEG automatically. Limits: images 5 MB, videos 16 MB (MP4), documents 100 MB.
                         </div>
                     </div>
-                    <field name="qualid_param_ids" nolabel="1" attrs="{'invisible': [('qualid_template_id', '=', False)]}">
+                    <field name="qualid_param_ids" nolabel="1" attrs="{'invisible': [('qualid_template_has_variables', '=', False)]}">
                         <tree editable="bottom" create="false" delete="false">
                             <field name="sequence" invisible="1"/>
                             <field name="component" readonly="1" force_save="1"/>
@@ -74,7 +75,7 @@
                                    placeholder="Fixed text" attrs="{'invisible': [('source', '!=', 'text')], 'required': [('source', '=', 'text')]}"/>
                         </tree>
                     </field>
-                    <div class="text-muted small" attrs="{'invisible': [('qualid_template_id', '=', False)]}">
+                    <div class="text-muted small" attrs="{'invisible': [('qualid_template_has_variables', '=', False)]}">
                         Use technical field names; follow relations with dots (partner_id.name, user_id.name, amount_total).
                         Manage templates under <b>Quali-D WhatsApp → Templates</b>.
                     </div>

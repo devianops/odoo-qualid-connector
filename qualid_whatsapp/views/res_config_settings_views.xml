@@ -135,7 +135,7 @@
                     <div class="o_qualid_guide">
                         <div class="o_qualid_guide_head">
                             <div>
-                                <h3>Automations</h3>
+                                <div class="o_qualid_guide_title" role="heading" aria-level="2">Automations</div>
                                 <div class="text-muted">
                                     Send a WhatsApp message automatically when something happens in Odoo.
                                     Choose one below — you pick the template, everything else is set up for you.
