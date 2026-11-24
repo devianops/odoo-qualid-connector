@@ -16,8 +16,9 @@
         'views/qualid_template_views.xml',
         'views/qualid_message_views.xml',
         'views/ir_actions_server_views.xml',
-        'views/res_config_settings_views.xml',
         'wizard/qualid_send_wizard_views.xml',
+        'wizard/qualid_automation_wizard_views.xml',
+        'views/res_config_settings_views.xml',
         'views/menus.xml',
     ],
     'assets': {

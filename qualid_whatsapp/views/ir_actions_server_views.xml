@@ -65,8 +65,8 @@
                     <field name="qualid_param_ids" nolabel="1" invisible="not qualid_template_id">
                         <tree editable="bottom" create="false" delete="false">
                             <field name="sequence" column_invisible="True"/>
-                            <field name="component" readonly="1"/>
-                            <field name="placeholder" readonly="1" string="Variable"/>
+                            <field name="component" readonly="1" force_save="1"/>
+                            <field name="placeholder" readonly="1" force_save="1" string="Variable"/>
                             <field name="source"/>
                             <field name="field_path" invisible="source != 'field'"
                                    required="source == 'field'" placeholder="e.g. partner_id.name"/>

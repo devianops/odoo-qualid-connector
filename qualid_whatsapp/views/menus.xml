@@ -16,6 +16,9 @@
     <menuitem id="menu_qualid_settings" name="Settings" parent="menu_qualid_config"
               action="action_qualid_settings" sequence="10"/>
 
+    <menuitem id="menu_qualid_new_automation" name="New WhatsApp Automation" parent="menu_qualid_config"
+              action="action_qualid_automation_wizard" sequence="15"/>
+
     <menuitem id="menu_qualid_automations" name="Automation Rules" parent="menu_qualid_config"
               action="base_automation.base_automation_act" sequence="20"/>
 </odoo>

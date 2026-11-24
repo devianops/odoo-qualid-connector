@@ -7,3 +7,5 @@ access_qualid_message_user,qualid.whatsapp.message user,model_qualid_whatsapp_me
 access_qualid_message_system,qualid.whatsapp.message system,model_qualid_whatsapp_message,base.group_system,1,1,1,1
 access_qualid_send_wizard_user,qualid.send.wizard user,model_qualid_send_wizard,base.group_user,1,1,1,1
 access_qualid_send_wizard_line_user,qualid.send.wizard.line user,model_qualid_send_wizard_line,base.group_user,1,1,1,1
+access_qualid_automation_wizard_system,qualid.automation.wizard system,model_qualid_automation_wizard,base.group_system,1,1,1,1
+access_qualid_automation_wizard_line_system,qualid.automation.wizard.line system,model_qualid_automation_wizard_line,base.group_system,1,1,1,1

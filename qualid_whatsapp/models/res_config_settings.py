@@ -14,6 +14,23 @@ class ResConfigSettings(models.TransientModel):
     qualid_connected = fields.Boolean(compute='_compute_qualid_status')
     qualid_template_count = fields.Integer(compute='_compute_qualid_status')
     qualid_last_sync = fields.Datetime(compute='_compute_qualid_status')
+    # Which apps are installed — ready-made automations only show "Set up" for these.
+    qualid_app_account = fields.Boolean(compute='_compute_qualid_apps')
+    qualid_app_sale = fields.Boolean(compute='_compute_qualid_apps')
+    qualid_app_stock = fields.Boolean(compute='_compute_qualid_apps')
+    qualid_app_crm = fields.Boolean(compute='_compute_qualid_apps')
+    qualid_app_purchase = fields.Boolean(compute='_compute_qualid_apps')
+    qualid_app_project = fields.Boolean(compute='_compute_qualid_apps')
+
+    @api.depends('company_id')
+    def _compute_qualid_apps(self):
+        for rec in self:
+            rec.qualid_app_account = 'account.move' in self.env
+            rec.qualid_app_sale = 'sale.order' in self.env
+            rec.qualid_app_stock = 'stock.picking' in self.env
+            rec.qualid_app_crm = 'crm.lead' in self.env
+            rec.qualid_app_purchase = 'purchase.order' in self.env
+            rec.qualid_app_project = 'project.task' in self.env
 
     # depends on company_id so the settings form computes these when it opens
     @api.depends('company_id')

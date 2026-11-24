@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="qualid_automation_wizard_view_form" model="ir.ui.view">
+        <field name="name">qualid.automation.wizard.form</field>
+        <field name="model">qualid.automation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="New WhatsApp Automation">
+                <field name="model_name" invisible="1"/>
+                <field name="needs_media" invisible="1"/>
+                <field name="preset_has_report" invisible="1"/>
+
+                <group>
+                    <field name="preset" widget="selection" placeholder="Choose what should trigger the message…"/>
+                    <field name="preset_when" readonly="1" invisible="not preset"/>
+                    <field name="template_id" options="{'no_create': True, 'no_open': True}" invisible="not preset"/>
+                </group>
+
+                <div class="text-muted small mb-2" invisible="not preset or template_id or not preset_has_report">
+                    <i class="fa fa-lightbulb-o me-1"/>Tip: pick a template with a <b>Document</b> header to attach the PDF automatically.
+                </div>
+
+                <!-- ── Header file (image / video / document templates) ── -->
+                <div invisible="not needs_media" class="o_qualid_media_box mt-2 mb-3">
+                    <div class="o_qualid_media_title">
+                        <i class="fa fa-paperclip me-1"/> Header file — this template needs a
+                        <b><field name="header_type" readonly="1" class="o_qualid_inline"/></b>
+                    </div>
+                    <group>
+                        <field name="qualid_media_source" widget="radio" string="Take the file from"
+                               options="{'horizontal': true}" required="needs_media"/>
+                        <field name="qualid_media_report_id" string="PDF report"
+                               invisible="qualid_media_source != 'report'" required="needs_media and qualid_media_source == 'report'"
+                               domain="[('model', '=', model_name), ('report_type', '=', 'qweb-pdf')]"
+                               options="{'no_create': True, 'no_open': True}"/>
+                        <field name="qualid_media_attachment_filter"
+                               invisible="qualid_media_source != 'attachment'"
+                               placeholder="optional — e.g. result, contract"/>
+                        <field name="qualid_media_image_field_id" string="Image field"
+                               invisible="qualid_media_source != 'image_field'" required="needs_media and qualid_media_source == 'image_field'"
+                               domain="[('model', '=', model_name), ('ttype', '=', 'binary')]"
+                               options="{'no_create': True, 'no_open': True}"/>
+                        <field name="qualid_media_url_field_id" string="Field with the link"
+                               invisible="qualid_media_source != 'url_field'" required="needs_media and qualid_media_source == 'url_field'"
+                               domain="[('model', '=', model_name), ('ttype', 'in', ('char', 'text'))]"
+                               options="{'no_create': True, 'no_open': True}"/>
+                        <field name="qualid_media_url" string="File link"
+                               invisible="qualid_media_source != 'url'" required="needs_media and qualid_media_source == 'url'"
+                               placeholder="https://…"/>
+                    </group>
+                </div>
+
+                <div invisible="not template_id">
+                    <div class="fw-bold mb-1">Template variables</div>
+                    <div class="text-muted small mb-1">Suggested fields are filled in — change any of them if needed.</div>
+                    <field name="line_ids" nolabel="1">
+                        <tree editable="bottom" create="false" delete="false">
+                            <field name="sequence" column_invisible="True"/>
+                            <field name="component" readonly="1" force_save="1"/>
+                            <field name="placeholder" readonly="1" force_save="1" string="Variable"/>
+                            <field name="source"/>
+                            <field name="field_path" invisible="source != 'field'" placeholder="e.g. partner_id.name"/>
+                            <field name="text" invisible="source != 'text'" placeholder="Fixed text"/>
+                        </tree>
+                    </field>
+                </div>
+
+                <group invisible="not template_id">
+                    <group>
+                        <field name="phone_path" placeholder="Automatic"/>
+                        <field name="active"/>
+                    </group>
+                    <group>
+                        <field name="send_mode" widget="radio"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="action_create" type="object" string="Create Automation" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_qualid_automation_wizard" model="ir.actions.act_window">
+        <field name="name">New WhatsApp Automation</field>
+        <field name="res_model">qualid.automation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

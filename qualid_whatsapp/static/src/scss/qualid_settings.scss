@@ -179,7 +179,7 @@ $qualid-wa: #25d366;
     color: var(--o-color-gray-800, #343a40);
 }
 
-// Automation guide (settings page)
+// Automations (settings page)
 .o_qualid_guide {
     margin: 8px 16px 16px;
     padding: 20px 24px;
@@ -187,7 +187,6 @@ $qualid-wa: #25d366;
     border: 1px solid rgba($qualid-blue, 0.22);
 
     h3 { margin: 0 0 4px; font-size: 18px; }
-    h4 { margin: 20px 0 10px; font-size: 15px; }
 
     .o_qualid_guide_head {
         display: flex;
@@ -195,101 +194,77 @@ $qualid-wa: #25d366;
         justify-content: space-between;
         align-items: flex-start;
         gap: 12px;
+        margin-bottom: 16px;
 
-        > div:first-child { max-width: 720px; }
+        > div:first-child { max-width: 640px; }
         .o_qualid_actions { margin-top: 0; }
     }
 
-    .o_qualid_howto {
+    .o_qualid_presets {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 10px;
-        margin: 16px 0;
-        font-size: 13px;
-
-        > div {
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-        }
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 8px;
     }
 
-    .o_qualid_step_num {
-        flex-shrink: 0;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background: $qualid-blue;
-        color: #fff;
-        font-size: 11px;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .o_qualid_recipes {
+    .o_qualid_preset {
         display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    .o_qualid_recipe {
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 10px;
         border: 1px solid var(--o-color-gray-300, #dee2e6);
-        border-radius: 8px;
 
-        summary {
+        > .fa {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            cursor: pointer;
-            font-weight: 600;
-            list-style: none;
-
-            &::-webkit-details-marker { display: none; }
-            &::after {
-                content: '\f107'; // fa-angle-down
-                font-family: FontAwesome;
-                margin-left: 8px;
-                color: var(--o-color-gray-600, #6c757d);
-            }
-            > i { color: $qualid-blue; width: 16px; text-align: center; }
+            justify-content: center;
+            background: rgba($qualid-blue, 0.08);
+            color: $qualid-blue;
+            font-size: 15px;
         }
 
-        &[open] summary {
-            border-bottom: 1px solid var(--o-color-gray-200, #e9ecef);
-            &::after { content: '\f106'; } // fa-angle-up
-        }
-
-        .o_qualid_app {
-            margin-left: auto;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: rgba($qualid-blue, 0.10);
-            color: $qualid-blue-dark;
-            white-space: nowrap;
-        }
-
-        table {
-            margin: 0;
+        .o_qualid_preset_text {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
             font-size: 13px;
 
-            th {
-                width: 120px;
-                font-weight: 600;
-                color: var(--o-color-gray-700, #495057);
-                padding-left: 14px;
+            span {
+                color: var(--o-color-gray-600, #6c757d);
+                font-size: 12px;
             }
-            td, th { border: 0; vertical-align: top; }
+        }
+
+        .btn { flex-shrink: 0; }
+    }
+
+    .o_qualid_needs {
+        flex-shrink: 0;
+        font-size: 11px;
+        color: var(--o-color-gray-600, #6c757d);
+        white-space: nowrap;
+    }
+
+    .o_qualid_more {
+        margin-top: 16px;
+
+        summary {
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: $qualid-blue;
+            margin-bottom: 10px;
         }
     }
 
     .o_qualid_tips {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 10px;
 
         .o_qualid_tip {
