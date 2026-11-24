@@ -17,8 +17,8 @@ class IrActionsServer(models.Model):
     )
     qualid_phone_path = fields.Char(
         'Phone Field',
-        help='Field holding the recipient number, e.g. mobile or partner_id.mobile. '
-             'Leave empty to try mobile, phone and the partner\'s numbers automatically.',
+        help='Field holding the recipient number, e.g. phone or partner_id.phone. '
+             'Leave empty to try the record and the partner\'s numbers automatically.',
     )
     qualid_param_ids = fields.One2many('qualid.action.param', 'action_id', 'Template Variables', copy=True)
     qualid_send_mode = fields.Selection(

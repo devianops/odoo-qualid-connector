@@ -15,7 +15,7 @@ class QualidSendWizard(models.TransientModel):
     template_id = fields.Many2one('qualid.whatsapp.template', 'Template', required=True)
     phone_path = fields.Char(
         'Phone Field',
-        help='Leave empty to try mobile, phone and the partner\'s numbers automatically.',
+        help='Leave empty to try the record and the partner\'s numbers automatically.',
     )
     phone_override = fields.Char(
         'Phone Number',

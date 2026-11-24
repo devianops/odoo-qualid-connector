@@ -80,7 +80,7 @@ PRESETS = {
         'app': 'CRM', 'icon': 'fa-bolt', 'model': 'crm.lead',
         'when': 'A new lead or opportunity with a phone number is created.',
         'trigger': 'on_create',
-        'domain': ['|', ('mobile', '!=', False), ('phone', '!=', False)],
+        'domain': [('phone', '!=', False)],
         'vars': ['contact_name', 'name', 'user_id.name'],
     },
     'lead_won': {
@@ -97,7 +97,7 @@ PRESETS = {
         'app': 'Contacts', 'icon': 'fa-user-plus', 'model': 'res.partner',
         'when': 'A contact with a phone number is created.',
         'trigger': 'on_create',
-        'domain': ['|', ('mobile', '!=', False), ('phone', '!=', False)],
+        'domain': [('phone', '!=', False)],
         'vars': ['name', 'company_id.name'],
     },
     'po_confirmed': {
@@ -140,7 +140,7 @@ class QualidAutomationWizard(models.TransientModel):
     line_ids = fields.One2many('qualid.automation.wizard.line', 'wizard_id', 'Variables')
     phone_path = fields.Char(
         'Phone Field',
-        help='Leave empty to use the record\'s mobile / phone, then its customer\'s.',
+        help='Leave empty to use the record\'s phone, then its customer\'s.',
     )
     send_mode = fields.Selection(
         [('queue', 'In background (recommended)'), ('now', 'Immediately')], 'Send', default='queue', required=True,
