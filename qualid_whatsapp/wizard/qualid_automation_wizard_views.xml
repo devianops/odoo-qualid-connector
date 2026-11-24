@@ -17,13 +17,13 @@
                 </group>
 
                 <div class="text-muted small mb-2" invisible="not preset or template_id or not preset_has_report">
-                    <i class="fa fa-lightbulb-o me-1"/>Tip: pick a template with a <b>Document</b> header to attach the PDF automatically.
+                    <i class="oi me-1" data-icon="lightbulb"/>Tip: pick a template with a <b>Document</b> header to attach the PDF automatically.
                 </div>
 
                 <!-- ── Header file (image / video / document templates) ── -->
                 <div invisible="not needs_media" class="o_qualid_media_box mt-2 mb-3">
                     <div class="o_qualid_media_title">
-                        <i class="fa fa-paperclip me-1"/> Header file — this template needs a
+                        <i class="oi me-1" data-icon="attach_file"/> Header file — this template needs a
                         <b><field name="header_type" readonly="1" class="o_qualid_inline"/></b>
                     </div>
                     <group>

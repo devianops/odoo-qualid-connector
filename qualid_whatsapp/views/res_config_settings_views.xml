@@ -27,10 +27,10 @@
                         </div>
                         <div class="o_qualid_status">
                             <span class="o_qualid_pill o_qualid_pill_ok" invisible="not qualid_connected">
-                                <i class="fa fa-check-circle me-1"/>Connected
+                                <i class="oi me-1" data-icon="check_circle"/>Connected
                             </span>
                             <span class="o_qualid_pill o_qualid_pill_off" invisible="qualid_connected">
-                                <i class="fa fa-plug me-1"/>Not connected
+                                <i class="oi me-1" data-icon="power"/>Not connected
                             </span>
                             <div class="o_qualid_account" invisible="not qualid_connected">
                                 <field name="qualid_account_email" readonly="1" class="o_qualid_inline"/>
@@ -71,17 +71,17 @@
                                 <!-- noSaveDialog: save the typed token silently instead of asking "save changes?" -->
                                 <button name="action_qualid_test_connection" type="object" noSaveDialog="1"
                                         invisible="qualid_connected"
-                                        string="Connect" icon="fa-plug" class="btn btn-primary btn-sm o_qualid_btn"/>
+                                        string="Connect" icon="power" class="btn btn-primary btn-sm o_qualid_btn"/>
                                 <button name="action_qualid_test_connection" type="object" noSaveDialog="1"
                                         invisible="not qualid_connected"
-                                        string="Test Connection" icon="fa-check" class="btn btn-secondary btn-sm"/>
+                                        string="Test Connection" icon="check" class="btn btn-secondary btn-sm"/>
                                 <button name="action_qualid_disconnect" type="object" noSaveDialog="1"
                                         invisible="not qualid_connected"
                                         confirm="Disconnect from Quali-D? The token will be deleted from this database and WhatsApp messages will stop sending until you connect again. Your templates and automations are kept."
-                                        string="Disconnect" icon="fa-unlink" class="btn btn-link btn-sm text-danger"/>
+                                        string="Disconnect" icon="link_off" class="btn btn-link btn-sm text-danger"/>
                                 <a href="https://dashboard.quali-d.com/settings/odoo-connector" target="_blank"
                                    role="button" class="btn btn-link btn-sm">
-                                    <i class="fa fa-external-link me-1"/>Get a token
+                                    <i class="oi me-1" data-icon="open_in_new"/>Get a token
                                 </a>
                             </div>
                         </setting>
@@ -99,16 +99,16 @@
                             </div>
                             <div class="o_qualid_actions">
                                 <button name="action_qualid_sync_templates" type="object"
-                                        string="Sync Now" icon="fa-refresh" class="btn btn-secondary btn-sm"/>
+                                        string="Sync Now" icon="refresh" class="btn btn-secondary btn-sm"/>
                                 <button name="%(qualid_whatsapp.action_qualid_template)d" type="action"
-                                        string="View Templates" icon="fa-list" class="btn btn-link btn-sm"/>
+                                        string="View Templates" icon="list_alt" class="btn btn-link btn-sm"/>
                             </div>
                         </setting>
                         <setting string="Sent Messages"
                                  help="Every message sent from Odoo, with its delivery status and any error.">
                             <div class="o_qualid_actions">
                                 <button name="%(qualid_whatsapp.action_qualid_message)d" type="action"
-                                        string="Open Message Log" icon="fa-whatsapp" class="btn btn-link btn-sm"/>
+                                        string="Open Message Log" icon="chat_bubble" class="btn btn-link btn-sm"/>
                             </div>
                         </setting>
                     </block>
@@ -117,7 +117,7 @@
                         <setting string="Images, videos and documents"
                                  help="PDFs, attachments and images sent from Odoo are uploaded securely to Quali-D so WhatsApp can deliver them.">
                             <div class="o_qualid_retention">
-                                <i class="fa fa-comments-o me-1"/>Kept with the conversation, so your team can open them later in the Quali-D inbox.
+                                <i class="oi me-1" data-icon="forum"/>Kept with the conversation, so your team can open them later in the Quali-D inbox.
                             </div>
                             <div class="text-muted small mt-1">
                                 Not counted toward your Quali-D broadcast media storage.
@@ -138,15 +138,15 @@
                             </div>
                             <div class="o_qualid_actions">
                                 <button name="%(qualid_whatsapp.action_qualid_automation_wizard)d" type="action"
-                                        string="New Automation" icon="fa-plus" class="btn btn-primary btn-sm o_qualid_btn"/>
+                                        string="New Automation" icon="add" class="btn btn-primary btn-sm o_qualid_btn"/>
                                 <button name="%(base_automation.base_automation_act)d" type="action"
-                                        string="My Automations" icon="fa-bolt" class="btn btn-link btn-sm"/>
+                                        string="My Automations" icon="flash_on" class="btn btn-link btn-sm"/>
                             </div>
                         </div>
 
                         <div class="o_qualid_presets">
                             <div class="o_qualid_preset">
-                                <i class="fa fa-file-text-o" title="Automation"/>
+                                <i class="oi" data-icon="receipt_long" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Invoice confirmed → send the invoice</b>
                                     <span>When a customer invoice is confirmed · invoice PDF attached</span>
@@ -156,7 +156,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_account">Install Invoicing</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-check-circle-o" title="Automation"/>
+                                <i class="oi" data-icon="check_circle" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Invoice paid → thank you</b>
                                     <span>When a customer invoice becomes paid</span>
@@ -166,7 +166,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_account">Install Invoicing</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-bell-o" title="Automation"/>
+                                <i class="oi" data-icon="notifications" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Payment reminder before the due date</b>
                                     <span>2 days before an unpaid invoice is due</span>
@@ -176,7 +176,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_account">Install Invoicing</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-exclamation-circle" title="Automation"/>
+                                <i class="oi" data-icon="error" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Overdue reminder</b>
                                     <span>3 days after the due date if still unpaid</span>
@@ -186,7 +186,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_account">Install Invoicing</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-paper-plane-o" title="Automation"/>
+                                <i class="oi" data-icon="send" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Quotation sent → send the quotation</b>
                                     <span>When a quotation is marked as sent · PDF attached</span>
@@ -196,7 +196,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_sale">Install Sales</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-shopping-cart" title="Automation"/>
+                                <i class="oi" data-icon="shopping_cart" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Order confirmed → send the order</b>
                                     <span>When a quotation is confirmed · PDF attached</span>
@@ -206,7 +206,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_sale">Install Sales</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-truck" title="Automation"/>
+                                <i class="oi" data-icon="local_shipping" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Order delivered → delivery slip</b>
                                     <span>When a customer delivery is validated · PDF attached</span>
@@ -216,7 +216,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_stock">Install Inventory</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-bolt" title="Automation"/>
+                                <i class="oi" data-icon="flash_on" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>New lead → instant reply</b>
                                     <span>When a lead with a phone number is created</span>
@@ -226,7 +226,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_crm">Install CRM</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-trophy" title="Automation"/>
+                                <i class="oi" data-icon="trophy" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Opportunity won → thank you</b>
                                     <span>When an opportunity reaches a Won stage</span>
@@ -236,7 +236,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_crm">Install CRM</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-user-plus" title="Automation"/>
+                                <i class="oi" data-icon="person_add" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>New contact → welcome message</b>
                                     <span>When a contact with a phone number is created</span>
@@ -245,7 +245,7 @@
                                         context="{'default_preset': 'contact_welcome'}" class="btn btn-secondary btn-sm"/>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-shopping-bag" title="Automation"/>
+                                <i class="oi" data-icon="shopping_bag" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Purchase order → send to supplier</b>
                                     <span>When a purchase order is confirmed · PDF attached</span>
@@ -255,7 +255,7 @@
                                 <span class="o_qualid_needs" invisible="qualid_app_purchase">Install Purchase</span>
                             </div>
                             <div class="o_qualid_preset">
-                                <i class="fa fa-tasks" title="Automation"/>
+                                <i class="oi" data-icon="task" title="Automation"/>
                                 <div class="o_qualid_preset_text">
                                     <b>Task done → notify the customer</b>
                                     <span>When a task with a customer is marked as done</span>
@@ -270,38 +270,38 @@
                             <summary>Tips: phone numbers, variables, files and troubleshooting</summary>
                             <div class="o_qualid_tips">
                                 <div class="o_qualid_tip">
-                                    <b><i class="fa fa-phone me-1"/>Phone number</b>
+                                    <b><i class="oi me-1" data-icon="phone"/>Phone number</b>
                                     Found automatically: the record's Mobile, then Phone, then its customer's.
                                     Numbers without a country code get your token's default country code.
                                 </div>
                                 <div class="o_qualid_tip">
-                                    <b><i class="fa fa-code me-1"/>Variables</b>
+                                    <b><i class="oi me-1" data-icon="code"/>Variables</b>
                                     Each variable reads a field. Dots follow links: <code>partner_id.name</code> is the customer's name.
                                     To find a field's name, turn on developer mode and hover the field.
                                 </div>
                                 <div class="o_qualid_tip">
-                                    <b><i class="fa fa-paperclip me-1"/>Header files</b>
+                                    <b><i class="oi me-1" data-icon="attach_file"/>Header files</b>
                                     Image, video and document templates need a file: a PDF of the record, its latest attachment,
                                     an image from the record, or a link.
                                 </div>
                                 <div class="o_qualid_tip">
-                                    <b><i class="fa fa-filter me-1"/>No duplicates</b>
+                                    <b><i class="oi me-1" data-icon="filter_alt"/>No duplicates</b>
                                     Each automation sends once per record. Marketing templates should only go to customers
                                     who agreed to receive WhatsApp messages.
                                 </div>
                                 <div class="o_qualid_tip">
-                                    <b><i class="fa fa-pencil me-1"/>Changing an automation</b>
+                                    <b><i class="oi me-1" data-icon="edit"/>Changing an automation</b>
                                     My Automations → open the rule. Use <b>Apply on</b> to limit which records count
                                     (e.g. add <i>Type is Customer Invoice</i>), open the WhatsApp action to change the template,
                                     variables or file, or untick <b>Active</b> to pause it.
                                 </div>
                                 <div class="o_qualid_tip">
-                                    <b><i class="fa fa-wrench me-1"/>Build your own</b>
+                                    <b><i class="oi me-1" data-icon="build"/>Build your own</b>
                                     My Automations → New → choose any model and trigger → Add an action →
                                     <b>Send WhatsApp (Quali-D)</b>. Works with any app, including custom ones.
                                 </div>
                                 <div class="o_qualid_tip">
-                                    <b><i class="fa fa-life-ring me-1"/>Checking what happened</b>
+                                    <b><i class="oi me-1" data-icon="support"/>Checking what happened</b>
                                     Each send leaves a note on the record. <b>Sent Messages</b> shows every message, its status and
                                     any error — failed ones can be retried.
                                 </div>

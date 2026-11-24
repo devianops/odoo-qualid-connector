@@ -13,7 +13,7 @@ PAID = ['paid', 'in_payment']
 PRESETS = {
     'invoice_posted': {
         'name': 'Invoice confirmed → send the invoice',
-        'app': 'Invoicing', 'icon': 'fa-file-text-o', 'model': 'account.move',
+        'app': 'Invoicing', 'icon': 'receipt_long', 'model': 'account.move',
         'when': 'A customer invoice is confirmed.',
         'trigger': 'on_state_set', 'state_value': 'posted',
         'domain': [('state', '=', 'posted'), ('move_type', '=', 'out_invoice')],
@@ -22,7 +22,7 @@ PRESETS = {
     },
     'invoice_paid': {
         'name': 'Invoice paid → thank you',
-        'app': 'Invoicing', 'icon': 'fa-check-circle-o', 'model': 'account.move',
+        'app': 'Invoicing', 'icon': 'check_circle', 'model': 'account.move',
         'when': 'A customer invoice becomes paid.',
         'trigger': 'on_create_or_write', 'trigger_fields': ['payment_state'],
         'pre_domain': [('payment_state', 'not in', PAID)],
@@ -32,7 +32,7 @@ PRESETS = {
     },
     'invoice_due_soon': {
         'name': 'Payment reminder 2 days before due date',
-        'app': 'Invoicing', 'icon': 'fa-bell-o', 'model': 'account.move',
+        'app': 'Invoicing', 'icon': 'notifications', 'model': 'account.move',
         'when': 'An unpaid customer invoice is due in 2 days (checked every 4 hours).',
         'trigger': 'on_time', 'date_field': 'invoice_date_due', 'delay': -2,
         'domain': [('move_type', '=', 'out_invoice'), ('state', '=', 'posted'), ('payment_state', 'in', UNPAID)],
@@ -41,7 +41,7 @@ PRESETS = {
     },
     'invoice_overdue': {
         'name': 'Overdue reminder 3 days after due date',
-        'app': 'Invoicing', 'icon': 'fa-exclamation-circle', 'model': 'account.move',
+        'app': 'Invoicing', 'icon': 'error', 'model': 'account.move',
         'when': 'A customer invoice is still unpaid 3 days after its due date (checked every 4 hours).',
         'trigger': 'on_time', 'date_field': 'invoice_date_due', 'delay': 3,
         'domain': [('move_type', '=', 'out_invoice'), ('state', '=', 'posted'), ('payment_state', 'in', UNPAID)],
@@ -50,7 +50,7 @@ PRESETS = {
     },
     'quotation_sent': {
         'name': 'Quotation sent → send the quotation',
-        'app': 'Sales', 'icon': 'fa-paper-plane-o', 'model': 'sale.order',
+        'app': 'Sales', 'icon': 'send', 'model': 'sale.order',
         'when': 'A quotation is marked as sent.',
         'trigger': 'on_state_set', 'state_value': 'sent',
         'domain': [('state', '=', 'sent')],
@@ -59,7 +59,7 @@ PRESETS = {
     },
     'order_confirmed': {
         'name': 'Order confirmed → send the order',
-        'app': 'Sales', 'icon': 'fa-shopping-cart', 'model': 'sale.order',
+        'app': 'Sales', 'icon': 'shopping_cart', 'model': 'sale.order',
         'when': 'A quotation is confirmed into a sales order.',
         'trigger': 'on_state_set', 'state_value': 'sale',
         'domain': [('state', '=', 'sale')],
@@ -68,7 +68,7 @@ PRESETS = {
     },
     'delivery_done': {
         'name': 'Order delivered → send the delivery slip',
-        'app': 'Inventory', 'icon': 'fa-truck', 'model': 'stock.picking',
+        'app': 'Inventory', 'icon': 'local_shipping', 'model': 'stock.picking',
         'when': 'A delivery to a customer is validated.',
         'trigger': 'on_state_set', 'state_value': 'done',
         'domain': [('state', '=', 'done'), ('picking_type_code', '=', 'outgoing')],
@@ -77,7 +77,7 @@ PRESETS = {
     },
     'lead_new': {
         'name': 'New lead → instant reply',
-        'app': 'CRM', 'icon': 'fa-bolt', 'model': 'crm.lead',
+        'app': 'CRM', 'icon': 'flash_on', 'model': 'crm.lead',
         'when': 'A new lead or opportunity with a phone number is created.',
         'trigger': 'on_create',
         'domain': [('phone', '!=', False)],
@@ -85,7 +85,7 @@ PRESETS = {
     },
     'lead_won': {
         'name': 'Opportunity won → thank you',
-        'app': 'CRM', 'icon': 'fa-trophy', 'model': 'crm.lead',
+        'app': 'CRM', 'icon': 'trophy', 'model': 'crm.lead',
         'when': 'An opportunity moves to a Won stage.',
         'trigger': 'on_create_or_write', 'trigger_fields': ['stage_id'],
         'pre_domain': [('stage_id.is_won', '=', False)],
@@ -94,7 +94,7 @@ PRESETS = {
     },
     'contact_welcome': {
         'name': 'New contact → welcome message',
-        'app': 'Contacts', 'icon': 'fa-user-plus', 'model': 'res.partner',
+        'app': 'Contacts', 'icon': 'person_add', 'model': 'res.partner',
         'when': 'A contact with a phone number is created.',
         'trigger': 'on_create',
         'domain': [('phone', '!=', False)],
@@ -102,7 +102,7 @@ PRESETS = {
     },
     'po_confirmed': {
         'name': 'Purchase order confirmed → send it to the supplier',
-        'app': 'Purchase', 'icon': 'fa-shopping-bag', 'model': 'purchase.order',
+        'app': 'Purchase', 'icon': 'shopping_bag', 'model': 'purchase.order',
         'when': 'A purchase order is confirmed.',
         'trigger': 'on_state_set', 'state_value': 'purchase',
         'domain': [('state', '=', 'purchase')],
@@ -111,7 +111,7 @@ PRESETS = {
     },
     'task_done': {
         'name': 'Task done → notify the customer',
-        'app': 'Project', 'icon': 'fa-tasks', 'model': 'project.task',
+        'app': 'Project', 'icon': 'task', 'model': 'project.task',
         'when': 'A task with a customer is marked as done.',
         'trigger': 'on_state_set', 'state_value': '1_done',
         'domain': [('state', '=', '1_done'), ('partner_id', '!=', False)],

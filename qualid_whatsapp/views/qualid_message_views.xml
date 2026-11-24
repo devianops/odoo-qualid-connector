@@ -36,7 +36,7 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_open_record" type="object" class="oe_stat_button" icon="fa-file-o"
+                        <button name="action_open_record" type="object" class="oe_stat_button" icon="description"
                                 invisible="not res_id">
                             <span>Document</span>
                         </button>

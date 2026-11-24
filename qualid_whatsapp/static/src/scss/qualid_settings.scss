@@ -222,7 +222,7 @@ $qualid-wa: #25d366;
         border-radius: 10px;
         border: 1px solid var(--o-color-gray-300, #dee2e6);
 
-        > .fa {
+        > .oi {
             flex-shrink: 0;
             width: 32px;
             height: 32px;
@@ -232,7 +232,8 @@ $qualid-wa: #25d366;
             justify-content: center;
             background: rgba($qualid-blue, 0.08);
             color: $qualid-blue;
-            font-size: 15px;
+            --oi-font-size: 20px;
+            font-size: 20px;
         }
 
         .o_qualid_preset_text {
