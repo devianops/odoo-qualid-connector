@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Quali-D WhatsApp',
-    'version': '16.0.1.1.0',
+    'version': '16.0.1.1.1',
     'summary': 'Send approved WhatsApp templates from Odoo automation rules, server actions and records via Quali-D',
     'author': 'Quali-D',
     'website': 'https://quali-d.com',
