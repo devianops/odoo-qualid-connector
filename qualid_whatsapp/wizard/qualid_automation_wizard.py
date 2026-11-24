@@ -98,7 +98,7 @@ PRESETS = {
         'when': 'A contact with a phone number is created.',
         'trigger': 'on_create',
         'domain': [('phone', '!=', False)],
-        'vars': ['name', 'company_id.name'],
+        'vars': ['name', '@company'],
     },
     'po_confirmed': {
         'name': 'Purchase order confirmed → send it to the supplier',
@@ -166,19 +166,26 @@ class QualidAutomationWizard(models.TransientModel):
     def _onchange_fill(self):
         """Variables get the preset's suggested fields in order; header file defaults to the preset's PDF."""
         p = PRESETS.get(self.preset) or {}
-        suggestions = list(p.get('vars') or [])
+        # '@company' = your own company name as fixed text (never empty)
+        suggestions = [('text', self.env.company.name) if s == '@company' else ('field', s)
+                       for s in (p.get('vars') or [])]
+
+        def suggested(i):
+            src, value = suggestions[i] if i < len(suggestions) else ('field', False)
+            return {'source': src, 'field_path': value if src == 'field' else False,
+                    'text': value if src == 'text' else False}
+
         tpl = self.template_id
         commands = [Command.clear()]
         if tpl:
             seq = 1
             if tpl.header_has_variable:
                 commands.append(Command.create({'sequence': seq, 'component': 'header', 'placeholder': '1',
-                                                'source': 'field', 'field_path': suggestions[0] if suggestions else False}))
+                                                **suggested(0)}))
                 seq += 1
             for i, name in enumerate(tpl._qualid_body_variable_names()):
                 commands.append(Command.create({'sequence': seq, 'component': 'body', 'placeholder': name,
-                                                'source': 'field',
-                                                'field_path': suggestions[i] if i < len(suggestions) else False}))
+                                                **suggested(i)}))
                 seq += 1
         self.line_ids = commands
 

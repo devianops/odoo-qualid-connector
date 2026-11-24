@@ -84,13 +84,18 @@ class QualidWhatsappMessage(models.Model):
         forced_phone = phone
         for record in records:
             phone = forced_phone or Api._qualid_resolve_phone(record, phone_path)
-            body, header = [], None
+            body, header, empty = [], None, []
             for line in param_lines.sorted(lambda l: (l.sequence, l.id)):
                 val = line._qualid_value(record)
+                if not (val or '').strip():
+                    # WhatsApp rejects empty variables — fail clearly instead of sending.
+                    empty.append('{{%s}} (%s)' % (line.placeholder, line.field_path if line.source == 'field' else _('fixed text')))
                 if line.component == 'header':
                     header = val
                 else:
                     body.append(val)
+            empty_error = _('Empty template variable for this record: %s. Fill in the field on the record '
+                            '(or change the variable), then retry.', ', '.join(empty)) if empty else False
 
             key = False
             if once_per_record and action:
@@ -99,9 +104,11 @@ class QualidWhatsappMessage(models.Model):
                 if existing:
                     if existing.state in ('failed', 'cancel'):
                         existing.write({
-                            'state': 'queued', 'phone': phone, 'body_params': json.dumps(body),
+                            'state': 'failed' if empty_error else 'queued', 'phone': phone,
+                            'body_params': json.dumps(body),
                             'header_text': header, 'attempts': 0, 'next_attempt': False,
-                            'error_code': False, 'error_message': False, 'media_filename': False,
+                            'error_code': 'EMPTY_VARIABLE' if empty_error else False,
+                            'error_message': empty_error or False, 'media_filename': False,
                             **media_vals,
                         })
                         result |= existing
@@ -124,6 +131,8 @@ class QualidWhatsappMessage(models.Model):
             if not phone:
                 vals.update(state='failed', error_code='NO_PHONE',
                             error_message=_('No phone number found on the record.'))
+            elif empty_error:
+                vals.update(state='failed', error_code='EMPTY_VARIABLE', error_message=empty_error)
             msg = Message.create(vals)
             if msg.state == 'failed':
                 msg._qualid_post_chatter()
