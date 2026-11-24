@@ -10,18 +10,19 @@
         <field name="model">ir.actions.server</field>
         <field name="inherit_id" ref="base.view_server_action_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group[@name='action_content']" position="after">
-                <div invisible="state != 'qualid_template'" class="mt-2">
+            <!-- After the whole two-column wrapper, so our block uses the full width -->
+            <xpath expr="//group[@name='action_wrapper']" position="after">
+                <div invisible="state != 'qualid_template'" class="o_qualid_action mt-2">
                     <field name="qualid_template_needs_media" invisible="1"/>
                     <group>
                         <group>
                             <field name="qualid_template_id"
                                    required="state == 'qualid_template'"
                                    options="{'no_create': True, 'no_open': True}"/>
-                            <field name="qualid_phone_path" placeholder="auto (mobile, phone, partner_id.mobile…)"/>
+                            <field name="qualid_phone_path" placeholder="Automatic"/>
                         </group>
                         <group>
-                            <field name="qualid_send_mode" widget="radio"/>
+                            <field name="qualid_send_mode" widget="radio" options="{'horizontal': true}"/>
                             <field name="qualid_once_per_record"/>
                         </group>
                     </group>
@@ -33,6 +34,7 @@
                         </div>
                         <group>
                             <field name="qualid_media_source" widget="radio" string="Take the file from"
+                                   options="{'horizontal': true}"
                                    required="state == 'qualid_template' and qualid_template_needs_media"/>
                             <field name="qualid_media_report_id" string="PDF report"
                                    invisible="qualid_media_source != 'report'" required="state == 'qualid_template' and qualid_template_needs_media and qualid_media_source == 'report'"
