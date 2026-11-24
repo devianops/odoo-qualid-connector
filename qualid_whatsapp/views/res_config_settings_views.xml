@@ -49,7 +49,7 @@
                         <div class="o_qualid_step">
                             <span class="o_qualid_step_num">2</span>
                             <div>
-                                <b>Paste it below and save</b>
+                                <b>Paste it below and click Connect</b>
                                 <div class="text-muted">Your templates are imported automatically</div>
                             </div>
                         </div>
@@ -70,8 +70,13 @@
                             <div class="text-muted">Paste the token you created in your Quali-D dashboard. Keep it private — you can rotate or revoke it at any time.</div>
                             <field name="qualid_api_token" password="True" placeholder="odoo_qd_…"/>
                             <div class="o_qualid_actions">
-                                <button name="action_qualid_test_connection" type="object"
-                                        string="Test Connection" icon="fa-plug" class="btn btn-primary btn-sm o_qualid_btn"/>
+                                <!-- noSaveDialog: save the typed token silently instead of asking "save changes?" -->
+                                <button name="action_qualid_test_connection" type="object" noSaveDialog="1"
+                                        attrs="{'invisible': [('qualid_connected', '=', True)]}"
+                                        string="Connect" icon="fa-plug" class="btn btn-primary btn-sm o_qualid_btn"/>
+                                <button name="action_qualid_test_connection" type="object" noSaveDialog="1"
+                                        attrs="{'invisible': [('qualid_connected', '=', False)]}"
+                                        string="Test Connection" icon="fa-check" class="btn btn-secondary btn-sm"/>
                                 <a href="https://dashboard.quali-d.com/settings/odoo-connector" target="_blank"
                                    role="button" class="btn btn-link btn-sm">
                                     <i class="fa fa-external-link me-1"/>Get a token
@@ -81,8 +86,8 @@
                         </div>
                     </div>
 
-                    <h2>WhatsApp Templates</h2>
-                    <div class="row mt16 o_settings_container" name="qualid_templates">
+                    <h2 attrs="{'invisible': [('qualid_connected', '=', False)]}">WhatsApp Templates</h2>
+                    <div class="row mt16 o_settings_container" name="qualid_templates" attrs="{'invisible': [('qualid_connected', '=', False)]}">
                         <div class="col-12 col-lg-6 o_setting_box">
                             <div class="o_setting_right_pane">
                             <span class="o_form_label">Approved Templates</span>
@@ -132,7 +137,7 @@
                     </div>
 
                     <!-- ── Ready-made automations ── -->
-                    <div class="o_qualid_guide">
+                    <div class="o_qualid_guide" attrs="{'invisible': [('qualid_connected', '=', False)]}">
                         <div class="o_qualid_guide_head">
                             <div>
                                 <div class="o_qualid_guide_title" role="heading" aria-level="2">Automations</div>
